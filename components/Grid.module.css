@@ -1,0 +1,118 @@
+.Grid {
+  display: inline-grid;
+  grid-gap: var(--gap-medium);
+  grid-template-columns: repeat(4, 1fr);
+  padding: var(--gap-medium);
+}
+
+.Letter {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--color-tone-4);
+  text-transform: uppercase;
+}
+
+.Empty,
+.Absent,
+.Correct,
+.Pending,
+.Present {
+  color: var(--color-text);
+  font-weight: bold;
+  user-select: none;
+
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+.Absent {
+  animation-name: absent;
+}
+.Correct {
+  animation-name: correct;
+}
+.Pending {
+  border-color: var(--color-tone-2);
+}
+.Present {
+  animation-name: present;
+}
+
+@keyframes absent {
+  0% {
+    background-color: transparent;
+    color: transparent;
+    transform: rotateX(0deg);
+  }
+  50% {
+    background-color: transparent;
+    color: transparent;
+    border-width: 2px;
+    transform: rotateX(90deg);
+  }
+  51% {
+    border-width: 0px;
+    background-color: var(--color-absent);
+    color: var(--color-text);
+  }
+  100% {
+    border-width: 0px;
+    background-color: var(--color-absent);
+    color: var(--color-text);
+    transform: rotateX(0deg);
+  }
+}
+
+@keyframes correct {
+  0% {
+    background-color: transparent;
+    color: transparent;
+    transform: rotateX(0deg);
+  }
+  50% {
+    background-color: transparent;
+    border-width: 2px;
+    color: transparent;
+    transform: rotateX(90deg);
+  }
+  51% {
+    border-width: 0px;
+    background-color: var(--color-correct);
+    color: var(--color-text);
+  }
+  100% {
+    background-color: var(--color-correct);
+    border-width: 0px;
+    color: var(--color-text);
+    transform: rotateX(0deg);
+  }
+}
+
+@keyframes present {
+  0% {
+    background-color: transparent;
+    color: transparent;
+    transform: rotateX(0deg);
+  }
+  50% {
+    background-color: transparent;
+    border-width: 2px;
+    color: transparent;
+    transform: rotateX(90deg);
+  }
+  51% {
+    border-width: 0px;
+    background-color: var(--color-present);
+    color: var(--color-text);
+  }
+  100% {
+    background-color: var(--color-present);
+    border-width: 0px;
+    color: var(--color-text);
+    transform: rotateX(0deg);
+  }
+}

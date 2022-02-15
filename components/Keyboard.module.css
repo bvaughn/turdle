@@ -1,0 +1,55 @@
+.Keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--gap-medium);
+}
+
+.TopRow,
+.MiddleRow,
+.BottomRow {
+  display: inline-grid;
+  grid-gap: var(--gap-small);
+  margin: 0;
+}
+.TopRow {
+  grid-template-columns: repeat(10, 1fr) 4rem;
+}
+.MiddleRow {
+  grid-template-columns: repeat(9, 1fr) 4rem;
+  margin: var(--gap-small) 0;
+}
+.BottomRow {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.Key {
+  min-width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  color: var(--color-text);
+  text-transform: capitalize;
+  user-select: none;
+  border: none;
+  background-color: var(--color-absent);
+  cursor: pointer;
+}
+.Key:disabled {
+  background-color: var(--color-tone-5);
+  color: var(--color-tone-2);
+  cursor: default;
+}
+
+.KeyCorrect,
+.KeyCorrect:disabled {
+  background-color: var(--color-correct);
+  color: var(--color-text);
+}
+.KeyPresent,
+.KeyPresent:disabled {
+  background-color: var(--color-present);
+  color: var(--color-text);
+}
