@@ -131,7 +131,6 @@ function LetterKey({ addPendingGuess, letter, state }) {
   } else if (presentKeys.hasOwnProperty(letter)) {
     classNames.push(styles.KeyPresent);
   }
-  console.log("correctKeys:", correctKeys, "presentKeys:", presentKeys);
 
   const handleClick = () => addPendingGuess(letter);
 

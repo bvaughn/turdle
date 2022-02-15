@@ -17,7 +17,13 @@ export default function Home() {
       </Head>
 
       <header className={styles.Header}>
-        <span className={styles.Turd}>TURD</span>le 💩
+        <a
+          href="https://github.com/bvaughn/turdle"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <span className={styles.Turd}>TURD</span>le 💩
+        </a>
       </header>
 
       <main className={styles.Main}>
