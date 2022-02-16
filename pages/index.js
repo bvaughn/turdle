@@ -8,7 +8,7 @@ import useDefaultWord from "../hooks/useDefaultWord";
 import useGameState from "../hooks/useGameState";
 import styles from "../styles/Home.module.css";
 
-const TITLE = "TURDle";
+const TITLE = "Turdle";
 const DESCRIPTION = "A game about poop";
 const URL = "https://turdle.app";
 const OG_IMAGE_URL = `${URL}/ogimage.png`;
@@ -88,7 +88,7 @@ export default function Home() {
           rel="noreferrer"
           target="_blank"
         >
-          <span className={styles.Turd}>TURD</span>le 💩
+          <span className={styles.Turd}>Turd</span>le 💩
         </a>
 
         <a
