@@ -1,19 +1,19 @@
 .Header {
   font-size: 1;
-  margin-bottom: 1rem;
+  margin-bottom: var(--size-large);
 }
 
 .CopiedToClipboard {
   background-color: lightyellow;
   border-radius: var(--border-radius);
-  margin-bottom: 0.5rem;
-  padding: 0.25rem;
+  margin-bottom: var(--size-medium);
+  padding: var(--size-small);
   font-weight: bold;
 }
 
 .Buttons {
   display: grid;
-  grid-gap: 0.5rem;
+  grid-gap: var(--size-medium);
   grid-template-columns: repeat(2, auto);
 }
 
@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   font-size: 1.5rem;
-  padding: 0.5rem 1rem;
+  padding: var(--size-medium) var(--size-large);
   border-radius: var(--border-radius);
   border: none;
   cursor: pointer;
@@ -41,13 +41,13 @@
 .ShareIcon {
   width: 1.5rem;
   height: 1.5rem;
-  margin-left: 0.5rem;
+  margin-left: var(--size-medium);
 }
 
 .CloseButton {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: var(--size-medium);
+  right: var(--size-medium);
   border: none;
   background-color: transparent;
   color: var(--color-tone-4);

@@ -1,5 +1,5 @@
 .Paragraph {
-  margin-bottom: var(--gap-medium);
+  margin-bottom: var(--size-medium);
 }
 .Paragraph:last-of-type {
   margin-bottom: 0;
@@ -8,18 +8,18 @@
 .Example {
   display: grid;
   justify-content: center;
-  grid-gap: var(--gap-small);
-  margin-bottom: var(--gap-medium);
+  grid-gap: var(--size-small);
+  margin-bottom: var(--size-medium);
   grid-template-columns: repeat(4, fit-content(1ch));
   background-color: var(--color-tone-7);
   border-radius: var(--border-radius);
-  padding: var(--gap-medium);
+  padding: var(--size-medium);
 }
 
 .CloseButton {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: var(--size-medium);
+  right: var(--size-medium);
   border: none;
   background-color: transparent;
   color: var(--color-tone-4);

@@ -38,9 +38,9 @@ a {
   --color-correct: #538d4e;
   --color-present: #b59f3b;
 
-  --gap-small: 0.25rem;
-  --gap-medium: 0.5rem;
-  --gap-large: 1rem;
+  --size-small: 0.25rem;
+  --size-medium: 0.5rem;
+  --size-large: 1rem;
 
   --border-radius: 0.25rem;
 }

@@ -1,6 +1,6 @@
 .Grid {
   display: inline-grid;
-  grid-gap: var(--gap-medium);
+  grid-gap: var(--size-medium);
   grid-template-columns: repeat(4, 1fr);
-  padding: var(--gap-medium);
+  padding: var(--size-medium);
 }
