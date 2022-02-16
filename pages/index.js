@@ -8,6 +8,11 @@ import useDefaultWord from "../hooks/useDefaultWord";
 import useGameState from "../hooks/useGameState";
 import styles from "../styles/Home.module.css";
 
+const TITLE = "TURDle";
+const DESCRIPTION = "A game about poop";
+const URL = "https://turdle.app";
+const OG_IMAGE_URL = `${URL}/ogimage.png`;
+
 export default function Home() {
   const defaultTargetWord = useDefaultWord();
   const {
@@ -32,9 +37,44 @@ export default function Home() {
   return (
     <div className={styles.Home}>
       <Head>
-        <title>TURDle</title>
-        <meta name="description" content="A game about poop" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>{TITLE}</title>
+
+        <meta name="title" content={TITLE} />
+        <meta name="description" content={DESCRIPTION} />
+
+        <link rel="icon" href="/favicons/favicon.ico" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicons/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicons/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicons/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/favicons/site.webmanifest" />
+        <meta name="msapplication-TileColor" content="#915f38" />
+        <meta name="theme-color" content="#ffffff" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={URL} />
+        <meta property="og:title" content={TITLE} />
+        <meta property="og:description" content={DESCRIPTION} />
+        <meta property="og:image" content={OG_IMAGE_URL} />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={URL} />
+        <meta property="twitter:title" content={TITLE} />
+        <meta property="twitter:description" content={DESCRIPTION} />
+        <meta property="twitter:image" content={OG_IMAGE_URL} />
       </Head>
 
       <header className={styles.Header}>
