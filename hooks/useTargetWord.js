@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 
 const WORD_LIST = [
+  "caca",
   "crap",
   "dirt",
   "dung",
