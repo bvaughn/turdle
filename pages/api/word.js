@@ -9,6 +9,7 @@ const WORD_LIST = [
   "soil",
   "scat",
   "dirt",
+  "caca"
 ];
 
 export default function handler(req, res) {
