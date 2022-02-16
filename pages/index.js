@@ -2,9 +2,11 @@ import Head from "next/head";
 import Grid from "../components/Grid";
 import Keyboard from "../components/Keyboard";
 import styles from "../styles/Home.module.css";
-import useGameState from "../utils/useGameState";
+import useGameState from "../hooks/useGameState";
+import useTargetWord from "../hooks/useTargetWord";
 
 export default function Home() {
+  const targetWord = useTargetWord();
   const { addPendingGuess, deletePendingGuess, state, submitPendingGuesses } =
     useGameState(targetWord);
 
@@ -41,19 +43,3 @@ export default function Home() {
     </div>
   );
 }
-
-const WORD_LIST = [
-  "crap",
-  "dirt",
-  "dung",
-  "poop",
-  "scat",
-  "shit",
-  "soil",
-  "turd",
-];
-
-// A true Wordle clone would use the GMT day as an index,
-// but this variant is meant to be replayable multiple times a day.
-const index = Math.floor(Math.random() * WORD_LIST.length);
-const targetWord = WORD_LIST[index];

@@ -26,6 +26,8 @@
 .Key {
   min-width: 2rem;
   height: 2rem;
+  margin: 0;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +36,7 @@
   text-transform: capitalize;
   user-select: none;
   border: none;
-  background-color: var(--color-absent);
+  background-color: var(--color-tone-3);
   cursor: pointer;
 }
 .Key:disabled {
@@ -46,6 +48,11 @@
 .KeyCorrect,
 .KeyCorrect:disabled {
   background-color: var(--color-correct);
+  color: var(--color-text);
+}
+.KeyIncorrect,
+.KeyIncorrect:disabled {
+  background-color: var(--color-incorrect);
   color: var(--color-text);
 }
 .KeyPresent,

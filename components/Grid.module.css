@@ -17,8 +17,8 @@
 }
 
 .Empty,
-.Absent,
 .Correct,
+.Incorrect,
 .Pending,
 .Present {
   color: var(--color-text);
@@ -29,11 +29,11 @@
   animation-fill-mode: forwards;
   animation-timing-function: ease-in-out;
 }
-.Absent {
-  animation-name: absent;
-}
 .Correct {
   animation-name: correct;
+}
+.Incorrect {
+  animation-name: incorrect;
 }
 .Pending {
   border-color: var(--color-tone-2);
@@ -42,7 +42,7 @@
   animation-name: present;
 }
 
-@keyframes absent {
+@keyframes incorrect {
   0% {
     background-color: transparent;
     color: transparent;
@@ -56,12 +56,12 @@
   }
   51% {
     border-width: 0px;
-    background-color: var(--color-absent);
+    background-color: var(--color-incorrect);
     color: var(--color-text);
   }
   100% {
     border-width: 0px;
-    background-color: var(--color-absent);
+    background-color: var(--color-incorrect);
     color: var(--color-text);
     transform: rotateX(0deg);
   }

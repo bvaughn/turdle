@@ -15,6 +15,12 @@ a {
   box-sizing: border-box;
 }
 
+@media (max-width: 520px), (max-height: 425px) {
+  html {
+    font-size: 14px;
+  }
+}
+
 :root {
   --color-tone-1: #ffffff;
   --color-tone-2: #818384;
@@ -23,11 +29,13 @@ a {
   --color-tone-5: #272729;
   --color-tone-6: #1a1a1b;
   --color-tone-7: #121213;
+
   --color-brown: #915f38;
-  --color-absent: #3a3a3c;
+  --color-text: #ffffff;
+
+  --color-incorrect: #3a3a3c;
   --color-correct: #538d4e;
   --color-present: #b59f3b;
-  --color-text: #ffffff;
 
   --gap-small: 0.25rem;
   --gap-medium: 0.5rem;

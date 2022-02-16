@@ -1,6 +1,10 @@
 .Home {
-  height: 100vh;
-  width: 100vw;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
   display: flex;
   flex-direction: column;
   background-color: var(--color-tone-7);
@@ -25,6 +29,7 @@
   justify-content: center;
   align-items: flex-start;
   flex: 1 1 auto;
+  overflow: auto;
 }
 
 .Footer {

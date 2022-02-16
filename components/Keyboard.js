@@ -1,14 +1,11 @@
 import { useLayoutEffect } from "react";
+import { STATUS_CORRECT, STATUS_INCORRECT, STATUS_PRESENT } from "../constants";
+import { stopEvent } from "../utils/events";
 import styles from "./Keyboard.module.css";
 
 const TOP_ROW_LETTERS = "qwertyuiop".split("");
 const MIDDLE_ROW_LETTERS = "asdfghjkl".split("");
 const BOTTOM_ROW_LETTERS = "zxcvbnm".split("");
-
-function stopEvent(event) {
-  event.preventDefault();
-  event.stopImmediatePropagation();
-}
 
 export default function Keyboard({
   addPendingGuess,
@@ -116,20 +113,21 @@ function EnterKey({ submitPendingGuesses, state }) {
 }
 
 function LetterKey({ addPendingGuess, letter, state }) {
-  const {
-    correctKeys,
-    completeStatus,
-    pendingGuesses,
-    presentKeys,
-    submittedGuesses,
-  } = state;
+  const { letterKeys, completeStatus, pendingGuesses, submittedGuesses } =
+    state;
 
   const disabled = completeStatus || pendingGuesses.length === 4;
   const classNames = [styles.Key];
-  if (correctKeys.hasOwnProperty(letter)) {
-    classNames.push(styles.KeyCorrect);
-  } else if (presentKeys.hasOwnProperty(letter)) {
-    classNames.push(styles.KeyPresent);
+  switch (letterKeys[letter]) {
+    case STATUS_CORRECT:
+      classNames.push(styles.KeyCorrect);
+      break;
+    case STATUS_PRESENT:
+      classNames.push(styles.KeyPresent);
+      break;
+    case STATUS_INCORRECT:
+      classNames.push(styles.KeyIncorrect);
+      break;
   }
 
   const handleClick = () => addPendingGuess(letter);

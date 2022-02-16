@@ -3,14 +3,19 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "prettier": "prettier --write \"{components,pages,styles,utils}/**/*.{js,json,css}\"",
+    "prettier": "prettier --write \"{components,hooks,pages,styles,utils}/**/*.{js,json,css}\"",
     "start": "next start",
+    "test": "jest __tests__/**/*.js",
+    "test:watch": "jest --watch __tests__/**/*.js",
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "jest": "^27.5.1",
     "next": "^12.0.8",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-test-renderer": "^17.0.2"
   },
   "devDependencies": {
     "eslint": "8.7.0",
