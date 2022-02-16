@@ -92,8 +92,9 @@ function DeleteKey({ deletePendingGuess, state }) {
       className={`${styles.Key} ${styles.KeyAvailable}`}
       disabled={endGameStatus || pendingGuesses.length === 0}
       onClick={deletePendingGuess}
+      title="Delete"
     >
-      Delete
+      <DeleteIcon />
     </button>
   );
 }
@@ -106,8 +107,9 @@ function EnterKey({ submitPendingGuesses, state }) {
       className={`${styles.Key} ${styles.KeyAvailable}`}
       disabled={endGameStatus || pendingGuesses.length !== 4}
       onClick={submitPendingGuesses}
+      title="Submit guess"
     >
-      Enter
+      <EnterIcon />
     </button>
   );
 }
@@ -141,3 +143,21 @@ function LetterKey({ addPendingGuess, letter, state }) {
     </button>
   );
 }
+
+const DeleteIcon = () => (
+  <svg className={styles.DeleteIcon} viewBox="0 0 24 24">
+    <path
+      fill="currentColor"
+      d="M19,15.59L17.59,17L14,13.41L10.41,17L9,15.59L12.59,12L9,8.41L10.41,7L14,10.59L17.59,7L19,8.41L15.41,12L19,15.59M22,3A2,2 0 0,1 24,5V19A2,2 0 0,1 22,21H7C6.31,21 5.77,20.64 5.41,20.11L0,12L5.41,3.88C5.77,3.35 6.31,3 7,3H22M22,5H7L2.28,12L7,19H22V5Z"
+    />
+  </svg>
+);
+
+const EnterIcon = () => (
+  <svg className={styles.EnterIcon} viewBox="0 0 24 24">
+    <path
+      fill="currentColor"
+      d="M19,7V11H5.83L9.41,7.41L8,6L2,12L8,18L9.41,16.58L5.83,13H21V7H19Z"
+    />
+  </svg>
+);
