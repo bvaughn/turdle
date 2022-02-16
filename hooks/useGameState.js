@@ -136,7 +136,6 @@ function reduce(state, action) {
       }
 
       // First, look for any "correct" letters.
-      // Then look for "present" letters (assuming we have remaining target word letters).
       for (let index = 0; index < newGuess.length; index++) {
         const tuple = newGuess[index];
         const letter = tuple[0];
@@ -149,17 +148,21 @@ function reduce(state, action) {
           }
         }
       }
+
+      // Then look for "present" letters (assuming we have remaining target word letters).
       for (let index = 0; index < newGuess.length; index++) {
         const tuple = newGuess[index];
-        const letter = tuple[0];
-        if (targetWordLetterCount[letter] > 0) {
-          const isPresent = targetWord.includes(letter);
-          if (isPresent) {
-            targetWordLetterCount[letter]--;
-            tuple[1] = STATUS_PRESENT;
+        if (tuple[1] != STATUS_CORRECT) {
+          const letter = tuple[0];
+          if (targetWordLetterCount[letter] > 0) {
+            const isPresent = targetWord.includes(letter);
+            if (isPresent) {
+              targetWordLetterCount[letter]--;
+              tuple[1] = STATUS_PRESENT;
 
-            if (newLetterKeys[letter] === STATUS_INCORRECT) {
-              newLetterKeys[letter] = STATUS_PRESENT;
+              if (newLetterKeys[letter] === STATUS_INCORRECT) {
+                newLetterKeys[letter] = STATUS_PRESENT;
+              }
             }
           }
         }

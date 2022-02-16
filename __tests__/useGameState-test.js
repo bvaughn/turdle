@@ -67,10 +67,10 @@ describe("useGameState", () => {
   it("should restart correctly", () => {
     const { state } = currentGameState;
     guessWordHelper("test");
-    expect(currentGameState.endGameStatus).toBe('won');
+    expect(currentGameState.endGameStatus).toBe("won");
     restart("next");
     expect(currentGameState.endGameStatus).toBeNull();
-    expect(currentGameState.targetWord).toBe('next');
+    expect(currentGameState.targetWord).toBe("next");
   });
 
   it("should support adding and deleting guesses", () => {
@@ -228,7 +228,7 @@ describe("useGameState", () => {
         Array [
           Array [
             "t",
-            "present",
+            "correct",
           ],
           Array [
             "a",
@@ -240,6 +240,40 @@ describe("useGameState", () => {
           ],
           Array [
             "s",
+            "present",
+          ],
+        ],
+      ]
+    `);
+  });
+
+  // https://github.com/bvaughn/turdle/issues/3
+  it("should correctly update guessed state", () => {
+    restart("poop");
+    guessWordHelper("ppoo");
+    expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
+      Object {
+        "o": "correct",
+        "p": "correct",
+      }
+    `);
+    expect(currentGameState.submittedGuesses).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Array [
+            "p",
+            "correct",
+          ],
+          Array [
+            "p",
+            "present",
+          ],
+          Array [
+            "o",
+            "correct",
+          ],
+          Array [
+            "o",
             "present",
           ],
         ],
