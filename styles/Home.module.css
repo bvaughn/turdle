@@ -59,6 +59,14 @@
   color: var(--color-text);
 }
 
+.Layout {
+  display: flex;
+  flex-direction: var(--game-layout-direction);
+  align-items: center;
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
 .Main {
   display: flex;
   justify-content: center;

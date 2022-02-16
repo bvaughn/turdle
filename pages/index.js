@@ -61,26 +61,28 @@ export default function Home() {
         </a>
       </header>
 
-      <main className={styles.Main}>
-        <Grid state={state} />
+      <div className={styles.Layout}>
+        <main className={styles.Main}>
+          <Grid state={state} />
 
-        <EndGameModal
-          dismissModal={dismissModal}
-          restart={restart}
-          state={state}
-        />
+          <EndGameModal
+            dismissModal={dismissModal}
+            restart={restart}
+            state={state}
+          />
 
-        {showHelp && <HelpModel dismissModal={dismissHelpModal} />}
-      </main>
+          {showHelp && <HelpModel dismissModal={dismissHelpModal} />}
+        </main>
 
-      <footer className={styles.Footer}>
-        <Keyboard
-          addPendingGuess={addPendingGuess}
-          deletePendingGuess={deletePendingGuess}
-          state={state}
-          submitPendingGuesses={submitPendingGuesses}
-        />
-      </footer>
+        <footer className={styles.Footer}>
+          <Keyboard
+            addPendingGuess={addPendingGuess}
+            deletePendingGuess={deletePendingGuess}
+            state={state}
+            submitPendingGuesses={submitPendingGuesses}
+          />
+        </footer>
+      </div>
     </div>
   );
 }
