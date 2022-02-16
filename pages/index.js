@@ -11,7 +11,7 @@ import styles from "../styles/Home.module.css";
 const TITLE = "TURDle";
 const DESCRIPTION = "A game about poop";
 const URL = "https://turdle.app";
-const OG_IMAGE_URL = "/ogimage.png";
+const OG_IMAGE_URL = `${URL}/ogimage.png`;
 
 export default function Home() {
   const defaultTargetWord = useDefaultWord();
@@ -38,14 +38,28 @@ export default function Home() {
     <div className={styles.Home}>
       <Head>
         <title>{TITLE}</title>
-        
+
         <meta name="title" content={TITLE} />
         <meta name="description" content={DESCRIPTION} />
 
         <link rel="icon" href="/favicons/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicons/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicons/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicons/favicon-16x16.png"
+        />
         <link rel="manifest" href="/favicons/site.webmanifest" />
         <meta name="msapplication-TileColor" content="#915f38" />
         <meta name="theme-color" content="#ffffff" />
