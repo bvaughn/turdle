@@ -4,10 +4,10 @@ import {
   STATUS_PENDING,
   STATUS_PRESENT,
 } from "../constants";
-import styles from "./GridLetter.module.css";
+import styles from "./Tile.module.css";
 
-export default function GridLetter({ letter, status }) {
-  const classNames = [styles.Letter];
+export default function Tile({ letter, status }) {
+  const classNames = [styles.Tile];
   if (letter) {
     switch (status) {
       case STATUS_CORRECT:

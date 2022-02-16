@@ -1,5 +1,5 @@
 import { GUESS_LENGTH, MAX_GUESSES, STATUS_PENDING } from "../constants";
-import GridLetter from "./GridLetter";
+import Tile from "./Tile";
 import styles from "./Grid.module.css";
 
 export default function Grid({ state }) {
@@ -26,7 +26,7 @@ export default function Grid({ state }) {
       }
 
       children.push(
-        <GridLetter
+        <Tile
           key={guessIndex * GUESS_LENGTH + letterIndex}
           letter={letter}
           status={status}

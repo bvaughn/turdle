@@ -4,8 +4,8 @@ import {
   STATUS_PENDING,
   STATUS_PRESENT,
 } from "../constants";
-import GridLetter from "./GridLetter";
 import Modal from "./Modal";
+import Tile from "./Tile";
 import styles from "./HelpModule.module.css";
 
 export default function HelpModal({ dismissModal }) {
@@ -27,10 +27,10 @@ export default function HelpModal({ dismissModal }) {
       </div>
       <div className={styles.Paragraph}>
         <div className={styles.Example}>
-          <GridLetter letter="C" status={STATUS_CORRECT} />
-          <GridLetter letter="R" status={STATUS_INCORRECT} />
-          <GridLetter letter="A" status={STATUS_PRESENT} />
-          <GridLetter letter="P" status={STATUS_INCORRECT} />
+          <Tile letter="C" status={STATUS_CORRECT} />
+          <Tile letter="R" status={STATUS_INCORRECT} />
+          <Tile letter="A" status={STATUS_PRESENT} />
+          <Tile letter="P" status={STATUS_INCORRECT} />
         </div>
       </div>
       <div className={styles.Paragraph}>
