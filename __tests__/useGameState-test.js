@@ -6,6 +6,8 @@ describe("useGameState", () => {
   let addPendingGuess = null;
   let currentGameState = null;
   let deletePendingGuess = null;
+  let dismissModal = null;
+  let restart = null;
   let submitPendingGuesses = null;
 
   function guessWordHelper(word) {
@@ -27,6 +29,12 @@ describe("useGameState", () => {
     deletePendingGuess = () => {
       act(() => result.deletePendingGuess());
     };
+    dismissModal = () => {
+      act(() => result.dismissModal());
+    };
+    restart = (targetWord) => {
+      act(() => result.restart(targetWord));
+    };
     submitPendingGuesses = () => {
       act(() => result.submitPendingGuesses());
     };
@@ -42,16 +50,27 @@ describe("useGameState", () => {
     addPendingGuess = null;
     currentGameState = null;
     deletePendingGuess = null;
+    dismissModal = null;
+    restart = null;
     submitPendingGuesses = null;
   });
 
   it("should initialize correctly", () => {
     const { state } = currentGameState;
-    expect(currentGameState.completeStatus).toBeNull();
+    expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.letterKeys).toEqual({});
     expect(currentGameState.pendingGuesses).toHaveLength(0);
     expect(currentGameState.submittedGuesses).toHaveLength(0);
     expect(currentGameState.targetWord).toEqual("test");
+  });
+
+  it("should restart correctly", () => {
+    const { state } = currentGameState;
+    guessWordHelper("test");
+    expect(currentGameState.endGameStatus).toBe('won');
+    restart("next");
+    expect(currentGameState.endGameStatus).toBeNull();
+    expect(currentGameState.targetWord).toBe('next');
   });
 
   it("should support adding and deleting guesses", () => {
@@ -78,7 +97,7 @@ describe("useGameState", () => {
 
   it("should correctly update guessed state", () => {
     guessWordHelper("sttt");
-    expect(currentGameState.completeStatus).toBeNull();
+    expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
       Object {
         "s": "present",
@@ -109,7 +128,7 @@ describe("useGameState", () => {
     `);
 
     guessWordHelper("tset");
-    expect(currentGameState.completeStatus).toBeNull();
+    expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
       Object {
         "e": "present",
@@ -159,7 +178,7 @@ describe("useGameState", () => {
     `);
 
     guessWordHelper("taes");
-    expect(currentGameState.completeStatus).toBeNull();
+    expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
       Object {
         "a": "incorrect",
@@ -230,18 +249,24 @@ describe("useGameState", () => {
 
   it("should mark a game as completed (won)", () => {
     guessWordHelper("test");
-    expect(currentGameState.completeStatus).toEqual("won");
+    expect(currentGameState.endGameStatus).toEqual("won");
+    expect(currentGameState.showEndGameModal).toBe(true);
+    dismissModal();
+    expect(currentGameState.showEndGameModal).toBe(false);
   });
 
   it("should mark a game as completed (lost)", () => {
     guessWordHelper("aaaa");
-    expect(currentGameState.completeStatus).toBeNull();
+    expect(currentGameState.endGameStatus).toBeNull();
     guessWordHelper("bbbb");
-    expect(currentGameState.completeStatus).toBeNull();
+    expect(currentGameState.endGameStatus).toBeNull();
     guessWordHelper("cccc");
-    expect(currentGameState.completeStatus).toBeNull();
+    expect(currentGameState.endGameStatus).toBeNull();
     guessWordHelper("dddd");
-    expect(currentGameState.completeStatus).toEqual("lost");
+    expect(currentGameState.endGameStatus).toEqual("lost");
+    expect(currentGameState.showEndGameModal).toBe(true);
+    dismissModal();
+    expect(currentGameState.showEndGameModal).toBe(false);
   });
 
   describe("validation", () => {
@@ -274,7 +299,7 @@ describe("useGameState", () => {
 
     it("should not allow modifying a completed game", () => {
       guessWordHelper("test");
-      expect(currentGameState.completeStatus).toEqual("won");
+      expect(currentGameState.endGameStatus).toEqual("won");
 
       const completedState = { ...currentGameState };
       addPendingGuess("a");

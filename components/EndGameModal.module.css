@@ -1,0 +1,80 @@
+.Background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.Dialog {
+  position: relative;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: var(--border-radius);
+}
+
+.Header {
+  font-size: 1;
+  margin-bottom: 1rem;
+}
+
+.CopiedToClipboard {
+  background-color: lightyellow;
+  border-radius: var(--border-radius);
+  margin-bottom: 0.5rem;
+  padding: 0.25rem;
+  font-weight: bold;
+}
+
+.Buttons {
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: repeat(2, auto);
+}
+
+.PlayAgainButton,
+.ShareButton {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+}
+
+.PlayAgainButton {
+  background-color: var(--color-tone-3);
+  color: var(--color-text);
+}
+
+.ShareButton {
+  background-color: var(--color-correct);
+  color: var(--color-text);
+}
+
+.ShareIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 0.5rem;
+}
+
+.CloseButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: none;
+  background-color: transparent;
+  color: var(--color-tone-4);
+  cursor: pointer;
+}
+
+.CloseIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}

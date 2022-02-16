@@ -1,14 +1,20 @@
 import Head from "next/head";
+import EndGameModal from "../components/EndGameModal";
 import Grid from "../components/Grid";
 import Keyboard from "../components/Keyboard";
 import styles from "../styles/Home.module.css";
 import useGameState from "../hooks/useGameState";
-import useTargetWord from "../hooks/useTargetWord";
+import { getTargetWord } from "../utils/words";
 
 export default function Home() {
-  const targetWord = useTargetWord();
-  const { addPendingGuess, deletePendingGuess, state, submitPendingGuesses } =
-    useGameState(targetWord);
+  const {
+    addPendingGuess,
+    deletePendingGuess,
+    dismissModal,
+    restart,
+    state,
+    submitPendingGuesses,
+  } = useGameState(getTargetWord());
 
   return (
     <div className={styles.Home}>
@@ -30,6 +36,12 @@ export default function Home() {
 
       <main className={styles.Main}>
         <Grid state={state} />
+
+        <EndGameModal
+          dismissModal={dismissModal}
+          restart={restart}
+          state={state}
+        />
       </main>
 
       <footer className={styles.Footer}>

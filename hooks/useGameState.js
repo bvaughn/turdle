@@ -11,12 +11,14 @@ import {
 
 const ACTION_TYPE_ADD_PENDING_GUESS = "add-pending-guess";
 const ACTION_TYPE_DELETE_PENDING_GUESS = "delete-pending-guess";
+const ACTION_TYPE_DISMISS_MODAL = "dismiss-modal";
+const ACTION_TYPE_RESTART = "restart";
 const ACTION_TYPE_SUBMIT_PENDING_GUESSES = "submit-pending-guesses";
 
 const DEFAULT_STATE = {
   // If the game is complete, this field will be either "won" or "lost".
   // If this field is null, the game is still in progress.
-  completeStatus: null,
+  endGameStatus: null,
 
   // State of keyboard keys.
   // Each key is a lower case letter (e.g. "a") which maps to its visual state.
@@ -26,6 +28,9 @@ const DEFAULT_STATE = {
 
   // This is the pending word being guessed.
   pendingGuesses: [],
+
+  // Display end-of-game modal with sharing options.
+  showEndGameModal: false,
 
   // Nested array of guessed "words".
   // Each "word" is an array of tuples: guessed "letters" and guess statuses.
@@ -41,10 +46,10 @@ function reduce(state, action) {
 
   switch (type) {
     case ACTION_TYPE_ADD_PENDING_GUESS: {
-      const { completeStatus, pendingGuesses } = state;
+      const { endGameStatus, pendingGuesses } = state;
       const { letter } = payload;
 
-      if (completeStatus != null) {
+      if (endGameStatus != null) {
         return state;
       } else if (pendingGuesses.length >= GUESS_LENGTH) {
         return state;
@@ -57,9 +62,9 @@ function reduce(state, action) {
     }
 
     case ACTION_TYPE_DELETE_PENDING_GUESS: {
-      const { completeStatus, pendingGuesses } = state;
+      const { endGameStatus, pendingGuesses } = state;
 
-      if (completeStatus) {
+      if (endGameStatus) {
         return state;
       } else if (pendingGuesses.length === 0) {
         return state;
@@ -71,22 +76,44 @@ function reduce(state, action) {
       };
     }
 
+    case ACTION_TYPE_DISMISS_MODAL: {
+      const { showEndGameModal } = state;
+
+      if (!showEndGameModal) {
+        return state;
+      }
+
+      return {
+        ...state,
+        showEndGameModal: false,
+      };
+    }
+
+    case ACTION_TYPE_RESTART: {
+      const { targetWord } = payload;
+
+      return {
+        ...DEFAULT_STATE,
+        targetWord,
+      };
+    }
+
     case ACTION_TYPE_SUBMIT_PENDING_GUESSES: {
       const {
-        completeStatus,
+        endGameStatus,
         letterKeys,
         pendingGuesses,
         submittedGuesses,
         targetWord,
       } = state;
 
-      if (completeStatus) {
+      if (endGameStatus) {
         return state;
       } else if (pendingGuesses.length !== GUESS_LENGTH) {
         return state;
       }
 
-      let newCompleteStatus = null;
+      let newEndGameStatus = null;
 
       const targetWordLetterCount = {};
       for (let index = 0; index < targetWord.length; index++) {
@@ -140,16 +167,17 @@ function reduce(state, action) {
 
       const newWord = pendingGuesses.join("");
       if (newWord === targetWord) {
-        newCompleteStatus = COMPLETE_STATUS_WON;
+        newEndGameStatus = COMPLETE_STATUS_WON;
       } else if (submittedGuesses.length === MAX_GUESSES - 1) {
-        newCompleteStatus = COMPLETE_STATUS_LOST;
+        newEndGameStatus = COMPLETE_STATUS_LOST;
       }
 
       return {
         ...state,
-        completeStatus: newCompleteStatus,
+        endGameStatus: newEndGameStatus,
         letterKeys: newLetterKeys,
         pendingGuesses: [],
+        showEndGameModal: newEndGameStatus !== null,
         submittedGuesses: [...submittedGuesses, newGuess],
       };
     }
@@ -178,6 +206,14 @@ export default function useGameState(targetWord) {
     dispatch({ type: ACTION_TYPE_DELETE_PENDING_GUESS });
   });
 
+  const dismissModal = useCallback(() => {
+    dispatch({ type: ACTION_TYPE_DISMISS_MODAL });
+  });
+
+  const restart = useCallback((targetWord) => {
+    dispatch({ type: ACTION_TYPE_RESTART, payload: { targetWord } });
+  });
+
   const submitPendingGuesses = useCallback(() => {
     dispatch({ type: ACTION_TYPE_SUBMIT_PENDING_GUESSES });
   });
@@ -185,6 +221,8 @@ export default function useGameState(targetWord) {
   return {
     addPendingGuess,
     deletePendingGuess,
+    dismissModal,
+    restart,
     state,
     submitPendingGuesses,
   };

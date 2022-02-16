@@ -85,12 +85,12 @@ export default function Keyboard({
 }
 
 function DeleteKey({ deletePendingGuess, state }) {
-  const { completeStatus, pendingGuesses } = state;
+  const { endGameStatus, pendingGuesses } = state;
 
   return (
     <button
       className={`${styles.Key} ${styles.KeyAvailable}`}
-      disabled={completeStatus || pendingGuesses.length === 0}
+      disabled={endGameStatus || pendingGuesses.length === 0}
       onClick={deletePendingGuess}
     >
       Delete
@@ -99,12 +99,12 @@ function DeleteKey({ deletePendingGuess, state }) {
 }
 
 function EnterKey({ submitPendingGuesses, state }) {
-  const { completeStatus, pendingGuesses } = state;
+  const { endGameStatus, pendingGuesses } = state;
 
   return (
     <button
       className={`${styles.Key} ${styles.KeyAvailable}`}
-      disabled={completeStatus || pendingGuesses.length !== 4}
+      disabled={endGameStatus || pendingGuesses.length !== 4}
       onClick={submitPendingGuesses}
     >
       Enter
@@ -113,10 +113,9 @@ function EnterKey({ submitPendingGuesses, state }) {
 }
 
 function LetterKey({ addPendingGuess, letter, state }) {
-  const { letterKeys, completeStatus, pendingGuesses, submittedGuesses } =
-    state;
+  const { letterKeys, endGameStatus, pendingGuesses, submittedGuesses } = state;
 
-  const disabled = completeStatus || pendingGuesses.length === 4;
+  const disabled = endGameStatus || pendingGuesses.length === 4;
   const classNames = [styles.Key];
   switch (letterKeys[letter]) {
     case STATUS_CORRECT:
