@@ -11,12 +11,47 @@
 }
 
 .Header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
   font-size: 1.5rem;
   color: var(--color-brown);
   text-align: center;
-  padding: var(--gap-medium) 0;
+  padding: var(--gap-medium) var(--gap-large);
   border-bottom: 1px solid var(--color-tone-4);
+}
+
+.HelpButton {
+  flex: 0 0 auto;
+  background-color: transparent;
+  border: none;
+  color: var(--color-text);
+  display: flex;
+  padding: 0;
+  cursor: pointer;
+}
+
+.TitleLink {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.GitHubLink {
+  flex: 0 0 auto;
+}
+
+.HelpIcon,
+.GitHubIcon {
+  color: var(--color-text);
+}
+.HelpIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.GitHubIcon {
+  width: 1rem;
+  height: 1rem;
 }
 
 .Turd {

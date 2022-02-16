@@ -1,11 +1,5 @@
-import {
-  GUESS_LENGTH,
-  MAX_GUESSES,
-  STATUS_CORRECT,
-  STATUS_INCORRECT,
-  STATUS_PENDING,
-  STATUS_PRESENT,
-} from "../constants";
+import { GUESS_LENGTH, MAX_GUESSES, STATUS_PENDING } from "../constants";
+import GridLetter from "./GridLetter";
 import styles from "./Grid.module.css";
 
 export default function Grid({ state }) {
@@ -32,7 +26,7 @@ export default function Grid({ state }) {
       }
 
       children.push(
-        <Guess
+        <GridLetter
           key={guessIndex * GUESS_LENGTH + letterIndex}
           letter={letter}
           status={status}
@@ -42,31 +36,4 @@ export default function Grid({ state }) {
   }
 
   return <div className={styles.Grid}>{children}</div>;
-}
-
-function Guess({ letter, status }) {
-  const classNames = [styles.Letter];
-  if (letter) {
-    switch (status) {
-      case STATUS_CORRECT:
-        classNames.push(styles.Correct);
-        break;
-      case STATUS_INCORRECT:
-        classNames.push(styles.Incorrect);
-        break;
-      case STATUS_PRESENT:
-        classNames.push(styles.Present);
-        break;
-      case STATUS_PENDING:
-        classNames.push(styles.Pending);
-        break;
-      default:
-        classNames.push(styles.Empty);
-        break;
-    }
-  } else {
-    classNames.push(styles.Empty);
-  }
-
-  return <div className={classNames.join(" ")}>{letter}</div>;
 }

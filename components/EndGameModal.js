@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import useModalDismissSignal from "../hooks/useModalDismissSignal";
+import { useState } from "react";
+import Modal from "./Modal";
 import {
   COMPLETE_STATUS_WON,
   MAX_GUESSES,
@@ -11,10 +11,7 @@ import { getTargetWord } from "../utils/words";
 import styles from "./EndGameModal.module.css";
 
 export default function EndGameModal({ dismissModal, restart, state }) {
-  const ref = useRef(null);
   const [didCopy, setDidCopy] = useState(false);
-
-  useModalDismissSignal(ref, dismissModal, true);
 
   if (!state.showEndGameModal) {
     return null;
@@ -53,32 +50,30 @@ export default function EndGameModal({ dismissModal, restart, state }) {
   };
 
   return (
-    <div className={styles.Background}>
-      <div className={styles.Dialog}>
-        <div className={styles.Header}>{text}</div>
+    <Modal dismissModal={dismissModal}>
+      <div className={styles.Header}>{text}</div>
 
-        <button className={styles.CloseButton} onClick={dismissModal}>
-          <CloseIcon />
+      <button className={styles.CloseButton} onClick={dismissModal}>
+        <CloseIcon />
+      </button>
+
+      {didCopy && (
+        <div className={styles.CopiedToClipboard}>Copied to clipboard</div>
+      )}
+
+      <div className={styles.Buttons}>
+        <button className={styles.PlayAgainButton} onClick={retry}>
+          Play again
         </button>
 
-        {didCopy && (
-          <div className={styles.CopiedToClipboard}>Copied to clipboard</div>
-        )}
-
-        <div className={styles.Buttons}>
-          <button className={styles.PlayAgainButton} onClick={retry}>
-            Play again
+        {didWin && (
+          <button className={styles.ShareButton} onClick={share}>
+            Share
+            <ShareIcon />
           </button>
-
-          {didWin && (
-            <button className={styles.ShareButton} onClick={share}>
-              Share
-              <ShareIcon />
-            </button>
-          )}
-        </div>
+        )}
       </div>
-    </div>
+    </Modal>
   );
 }
 
