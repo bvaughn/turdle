@@ -1,3 +1,7 @@
+.DelayFadeIn {
+  animation-delay: var(--animation-duration);
+}
+
 .Header {
   font-size: 1;
   margin-bottom: var(--size-large);

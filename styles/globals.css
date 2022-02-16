@@ -43,4 +43,6 @@ a {
   --size-large: 1rem;
 
   --border-radius: 0.25rem;
+
+  --animation-duration: 500ms;
 }

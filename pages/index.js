@@ -4,11 +4,12 @@ import EndGameModal from "../components/EndGameModal";
 import HelpModel from "../components/HelpModel";
 import Grid from "../components/Grid";
 import Keyboard from "../components/Keyboard";
+import useDefaultWord from "../hooks/useDefaultWord";
 import useGameState from "../hooks/useGameState";
-import { getTargetWord } from "../utils/words";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const defaultTargetWord = useDefaultWord();
   const {
     addPendingGuess,
     deletePendingGuess,
@@ -16,7 +17,7 @@ export default function Home() {
     restart,
     state,
     submitPendingGuesses,
-  } = useGameState(getTargetWord());
+  } = useGameState(defaultTargetWord);
 
   const [showHelp, setShowHelp] = useState(false);
 

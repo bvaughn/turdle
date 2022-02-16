@@ -50,7 +50,7 @@ export default function EndGameModal({ dismissModal, restart, state }) {
   };
 
   return (
-    <Modal dismissModal={dismissModal}>
+    <Modal className={styles.DelayFadeIn} dismissModal={dismissModal}>
       <div className={styles.Header}>{text}</div>
 
       <button className={styles.CloseButton} onClick={dismissModal}>
