@@ -16,33 +16,6 @@ a {
   box-sizing: border-box;
 }
 
-:root {
-  --color-tone-1: #ffffff;
-  --color-tone-2: #818384;
-  --color-tone-3: #565758;
-  --color-tone-4: #3a3a3c;
-  --color-tone-5: #272729;
-  --color-tone-6: #1a1a1b;
-  --color-tone-7: #121213;
-
-  --color-brown: #915f38;
-  --color-text: #ffffff;
-
-  --color-pending: #121213;
-  --color-incorrect: #3a3a3c;
-  --color-correct: #538d4e;
-  --color-present: #b59f3b;
-
-  --size-small: 0.25rem;
-  --size-medium: 0.5rem;
-  --size-large: 1rem;
-
-  --border-radius: 0.25rem;
-
-  --animation-duration: 500ms;
-  --game-layout-direction: column;
-}
-
 @media (max-width: 520px), (max-height: 425px) {
   html {
     font-size: 14px;
@@ -63,4 +36,40 @@ a {
   html {
     font-size: 12px;
   }
+}
+
+:root {
+  --color-tone-1: #ffffff;
+  --color-tone-1-hover: color(#ffffff tint(10%));
+  --color-tone-2: #818384;
+  --color-tone-2-hover: color(#818384 tint(10%));
+  --color-tone-3: #565758;
+  --color-tone-3-hover: color(#565758 tint(10%));
+  --color-tone-4: #3a3a3c;
+  --color-tone-4-hover: color(#3a3a3c tint(10%));
+  --color-tone-5: #272729;
+  --color-tone-5-hover: color(#272729 tint(10%));
+  --color-tone-6: #121213;
+  --color-tone-6-hover: color(#121213 tint(10%));
+
+  --color-brown: #915f38;
+  --color-text: #ffffff;
+
+  --color-pending: #121213;
+  --color-pending-hover: color(#121213 tint(10%));
+  --color-incorrect: #3a3a3c;
+  --color-incorrect-hover: color(#3a3a3c tint(10%));
+  --color-correct: #538d4e;
+  --color-correct-hover: color(#538d4e tint(10%));
+  --color-present: #b59f3b;
+  --color-present-hover: color(#b59f3b tint(10%));
+
+  --size-small: 0.25rem;
+  --size-medium: 0.5rem;
+  --size-large: 1rem;
+
+  --border-radius: 0.25rem;
+
+  --animation-duration: 500ms;
+  --game-layout-direction: column;
 }

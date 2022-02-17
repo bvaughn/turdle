@@ -7,7 +7,7 @@
 
   display: flex;
   flex-direction: column;
-  background-color: var(--color-tone-7);
+  background-color: var(--color-tone-6);
 }
 
 .Header {

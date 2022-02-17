@@ -38,6 +38,7 @@
   user-select: none;
   border: none;
   background-color: var(--color-tone-3);
+  transition: background-color 250ms;
   cursor: pointer;
 }
 .Key:disabled {
@@ -45,21 +46,37 @@
   color: var(--color-tone-2);
   cursor: default;
 }
+.Key:hover:not(.Key:disabled) {
+  background-color: var(--color-tone-3-hover);
+}
+.Key:active:not(.Key:disabled) {
+  position: relative;
+  top: 1px;
+}
 
 .KeyCorrect,
 .KeyCorrect:disabled {
   background-color: var(--color-correct);
   color: var(--color-text);
 }
+.KeyCorrect:hover:not(.KeyCorrect:disabled) {
+  background-color: var(--color-correct-hover);
+}
 .KeyIncorrect,
 .KeyIncorrect:disabled {
   background-color: var(--color-incorrect);
   color: var(--color-text);
 }
+.KeyIncorrect:hover:not(.KeyIncorrect:disabled) {
+  background-color: var(--color-incorrect-hover);
+}
 .KeyPresent,
 .KeyPresent:disabled {
   background-color: var(--color-present);
   color: var(--color-text);
+}
+.KeyPresent:hover:not(.KeyPresent:disabled) {
+  background-color: var(--color-present-hover);
 }
 
 .DeleteIcon,

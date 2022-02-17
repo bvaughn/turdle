@@ -2,6 +2,10 @@
   animation-delay: var(--animation-duration);
 }
 
+.Content {
+  min-width: 20rem;
+}
+
 .Header {
   font-size: 1;
   margin-bottom: var(--size-large);
@@ -16,9 +20,8 @@
 }
 
 .Buttons {
-  display: grid;
-  grid-gap: var(--size-medium);
-  grid-template-columns: repeat(2, auto);
+  display: flex;
+  justify-content: center;
 }
 
 .PlayAgainButton,
@@ -32,6 +35,13 @@
   cursor: pointer;
 }
 
+.Button {
+  margin-right: var(--size-medium);
+}
+.Button:last-of-type {
+  margin-right: 0;
+}
+
 .PlayAgainButton {
   background-color: var(--color-tone-3);
   color: var(--color-text);
@@ -42,6 +52,7 @@
   color: var(--color-text);
 }
 
+.ReplayIcon,
 .ShareIcon {
   width: 1.5rem;
   height: 1.5rem;
