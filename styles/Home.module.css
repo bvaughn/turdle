@@ -28,7 +28,6 @@
   border: none;
   color: var(--color-text);
   display: flex;
-  padding: 0;
   cursor: pointer;
 }
 
