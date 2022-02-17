@@ -42,7 +42,7 @@
 }
 
 .PlayAgainButton {
-  background-color: var(--color-tone-3);
+  background-color: var(--color-tone-4);
   color: var(--color-text);
 }
 
@@ -64,7 +64,7 @@
   right: var(--size-medium);
   border: none;
   background-color: transparent;
-  color: var(--color-tone-4);
+  color: var(--color-tone-5);
   cursor: pointer;
 }
 
@@ -74,7 +74,7 @@
 }
 
 .History {
-  background: #eee;
+  background: var(--color-tone-2);
   margin: var(--size-medium) 0;
   padding: var(--size-medium);
   border-radius: var(--border-radius);

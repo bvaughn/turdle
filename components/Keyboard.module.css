@@ -36,17 +36,17 @@
   text-transform: capitalize;
   user-select: none;
   border: none;
-  background-color: var(--color-tone-3);
+  background-color: var(--color-tone-4);
   transition: background-color 250ms;
   cursor: pointer;
 }
 .Key:disabled {
-  background-color: var(--color-tone-5);
-  color: var(--color-tone-2);
+  background-color: var(--color-tone-6);
+  color: var(--color-tone-3);
   cursor: default;
 }
 .Key:hover:not(.Key:disabled) {
-  background-color: var(--color-tone-3-hover);
+  background-color: var(--color-tone-4-hover);
 }
 .Key:active:not(.Key:disabled) {
   position: relative;

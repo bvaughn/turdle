@@ -1,16 +1,18 @@
 :root {
   --color-tone-1: #ffffff;
   --color-tone-1-hover: color(#ffffff tint(10%));
-  --color-tone-2: #818384;
-  --color-tone-2-hover: color(#818384 tint(10%));
-  --color-tone-3: #565758;
-  --color-tone-3-hover: color(#565758 tint(10%));
-  --color-tone-4: #3a3a3c;
-  --color-tone-4-hover: color(#3a3a3c tint(10%));
-  --color-tone-5: #272729;
-  --color-tone-5-hover: color(#272729 tint(10%));
-  --color-tone-6: #121213;
-  --color-tone-6-hover: color(#121213 tint(10%));
+  --color-tone-2: #eeeeee;
+  --color-tone-2-hover: color(#eeeeee tint(10%));
+  --color-tone-3: #818384;
+  --color-tone-3-hover: color(#818384 tint(10%));
+  --color-tone-4: #565758;
+  --color-tone-4-hover: color(#565758 tint(10%));
+  --color-tone-5: #3a3a3c;
+  --color-tone-5-hover: color(#3a3a3c tint(10%));
+  --color-tone-6: #272729;
+  --color-tone-6-hover: color(#272729 tint(10%));
+  --color-tone-7: #121213;
+  --color-tone-7-hover: color(#121213 tint(10%));
 
   --color-brown: #915f38;
   --color-text: #ffffff;

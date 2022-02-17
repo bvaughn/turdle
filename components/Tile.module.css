@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius);
-  border: 2px solid var(--color-tone-4);
+  border: 2px solid var(--color-tone-5);
   text-transform: uppercase;
   background-color: var(--color-pending);
 }
@@ -30,7 +30,7 @@
   animation-name: incorrect;
 }
 .Pending {
-  border-color: var(--color-tone-2);
+  border-color: var(--color-tone-3);
 }
 .Present {
   animation-name: present;

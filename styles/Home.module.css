@@ -7,7 +7,7 @@
 
   display: flex;
   flex-direction: column;
-  background-color: var(--color-tone-6);
+  background-color: var(--color-tone-7);
 }
 
 .Header {
@@ -19,7 +19,7 @@
   color: var(--color-brown);
   text-align: center;
   padding: var(--size-medium) var(--size-large);
-  border-bottom: 1px solid var(--color-tone-4);
+  border-bottom: 1px solid var(--color-tone-5);
 }
 
 .HelpButton {
