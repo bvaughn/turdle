@@ -85,6 +85,7 @@ function History() {
   const { lostCount, guessDistribution, wonCount } = gameStats;
 
   const winPercentage = Math.round(100 * (wonCount / (wonCount + lostCount)));
+  const header = `You've won ${winPercentage}% of the games you've played!`;
 
   let maxGuessCount = 0;
   for (let i = 1; i <= MAX_GUESSES; i++) {
@@ -93,9 +94,7 @@ function History() {
 
   return (
     <div className={styles.History}>
-      <div className={styles.HistoryHeader}>
-        You've won {winPercentage}% of the games you've played!
-      </div>
+      <div className={styles.HistoryHeader}>{header}</div>
       <ul className={styles.HistoryList}>
         <HistoryListItem
           guessCount={guessDistribution[1]}
