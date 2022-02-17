@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  font-size: 1.5rem;
+  font-size: var(--font-size-5);
   color: var(--color-brown);
   text-align: center;
   padding: var(--size-medium) var(--size-large);

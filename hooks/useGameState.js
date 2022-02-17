@@ -1,8 +1,13 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
+import {
+  localStorageGetItem,
+  localStorageSetItem,
+} from "../utils/localStorage";
 import {
   COMPLETE_STATUS_LOST,
   COMPLETE_STATUS_WON,
   GUESS_LENGTH,
+  LOCAL_STORAGE_KEY_GAME_STATS,
   MAX_GUESSES,
   STATUS_CORRECT,
   STATUS_INCORRECT,
@@ -14,6 +19,17 @@ const ACTION_TYPE_DELETE_PENDING_GUESS = "delete-pending-guess";
 const ACTION_TYPE_DISMISS_MODAL = "dismiss-modal";
 const ACTION_TYPE_RESTART = "restart";
 const ACTION_TYPE_SUBMIT_PENDING_GUESSES = "submit-pending-guesses";
+
+const DEFAULT_GAME_STATS = {
+  lostCount: 0,
+  wonCount: 0,
+  guessDistribution: {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+  },
+};
 
 const DEFAULT_STATE = {
   // If the game is complete, this field will be either "won" or "lost".
@@ -195,6 +211,30 @@ export default function useGameState(targetWord) {
     ...DEFAULT_STATE,
     targetWord,
   });
+
+  useEffect(() => {
+    const { endGameStatus, submittedGuesses } = state;
+    if (endGameStatus != null) {
+      let gameStats = localStorageGetItem(LOCAL_STORAGE_KEY_GAME_STATS);
+      if (gameStats == null) {
+        gameStats = DEFAULT_GAME_STATS;
+      } else {
+        gameStats = JSON.parse(gameStats);
+      }
+
+      if (endGameStatus === COMPLETE_STATUS_WON) {
+        gameStats.guessDistribution[submittedGuesses.length]++;
+        gameStats.wonCount++;
+      } else {
+        gameStats.lostCount++;
+      }
+
+      localStorageSetItem(
+        LOCAL_STORAGE_KEY_GAME_STATS,
+        JSON.stringify(gameStats)
+      );
+    }
+  }, [state]);
 
   const addPendingGuess = useCallback((letter) => {
     dispatch({

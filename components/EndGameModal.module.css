@@ -7,8 +7,7 @@
 }
 
 .Header {
-  font-size: 1;
-  margin-bottom: var(--size-large);
+  margin-bottom: var(--size-medium);
 }
 
 .CopiedToClipboard {
@@ -28,7 +27,7 @@
 .ShareButton {
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: var(--font-size-5);
   padding: var(--size-medium) var(--size-large);
   border-radius: var(--border-radius);
   border: none;
@@ -72,4 +71,52 @@
 .CloseIcon {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+.History {
+  background: #eee;
+  margin: var(--size-medium) 0;
+  padding: var(--size-medium);
+  border-radius: var(--border-radius);
+}
+
+.HistoryHeader {
+  margin-bottom: var(--size-small);
+  font-size: var(--font-size-2);
+}
+
+.HistoryList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-1);
+}
+
+.HistoryListItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--size-tiny);
+}
+.HistoryListItem:last-of-type {
+  margin-bottom: 0;
+}
+
+.HistoryLabel {
+  width: 0.75rem;
+}
+
+.HistoryCorrextBox,
+.HistoryEmptyBox {
+  color: var(--color-text);
+  display: inline-flex;
+  height: var(--size-large);
+  line-height: var(--size-large);
+  padding: 0 var(--size-small);
+  border-radius: var(--border-radius);
+}
+.HistoryCorrextBox {
+  background-color: var(--color-correct);
+}
+.HistoryEmptyBox {
+  background-color: var(--color-incorrect);
 }
