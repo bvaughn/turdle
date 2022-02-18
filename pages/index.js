@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import Head from "next/head";
 import EndGameModal from "../components/EndGameModal";
 import Grid from "../components/Grid";
-import HelpModel from "../components/HelpModel";
+import HelpModal from "../components/HelpModal";
 import Icon from "../components/Icon";
 import Keyboard from "../components/Keyboard";
 import useGameState from "../hooks/useGameState";
-import { getWorList } from "../utils/words";
+import { getRandomWordList } from "../utils/words";
 import styles from "../styles/Home.module.css";
 
 const TITLE = "Turdle";
@@ -15,7 +15,7 @@ const URL = "https://turdle.app";
 const OG_IMAGE_URL = `${URL}/ogimage.png`;
 
 export default function Home() {
-  const wordList = useMemo(() => getWorList(), []);
+  const wordList = useMemo(() => getRandomWordList(), []);
   const {
     addPendingGuess,
     deletePendingGuess,
@@ -31,7 +31,7 @@ export default function Home() {
     setShowHelp(false);
   };
 
-  const showHelpModel = () => {
+  const showHelpModal = () => {
     setShowHelp(true);
   };
 
@@ -79,7 +79,7 @@ export default function Home() {
       </Head>
 
       <header className={styles.Header}>
-        <button className={styles.HelpButton} onClick={showHelpModel}>
+        <button className={styles.HelpButton} onClick={showHelpModal}>
           <Icon className={styles.HelpIcon} type="help" />
         </button>
 
@@ -112,7 +112,7 @@ export default function Home() {
             state={state}
           />
 
-          {showHelp && <HelpModel dismissModal={dismissHelpModal} />}
+          {showHelp && <HelpModal dismissModal={dismissHelpModal} />}
         </main>
 
         <footer className={styles.Footer}>

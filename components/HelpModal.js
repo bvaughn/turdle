@@ -7,7 +7,7 @@ import {
 import Modal from "./Modal";
 import Tile from "./Tile";
 import Icon from "./Icon";
-import styles from "./HelpModule.module.css";
+import styles from "./HelpModal.module.css";
 
 export default function HelpModal({ dismissModal }) {
   return (
