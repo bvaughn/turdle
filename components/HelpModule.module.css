@@ -11,7 +11,7 @@
   grid-gap: var(--size-small);
   margin-bottom: var(--size-medium);
   grid-template-columns: repeat(4, fit-content(1ch));
-  background-color: var(--color-tone-7);
+  background-color: var(--color-gray-shade-10);
   border-radius: var(--border-radius);
   padding: var(--size-medium);
 }
@@ -22,7 +22,7 @@
   right: var(--size-medium);
   border: none;
   background-color: transparent;
-  color: var(--color-tone-5);
+  color: var(--color-gray-shade-30);
   cursor: pointer;
 }
 

@@ -7,7 +7,7 @@
 
   display: flex;
   flex-direction: column;
-  background-color: var(--color-tone-7);
+  background-color: var(--color-gray-shade-10);
 }
 
 .Header {
@@ -19,7 +19,7 @@
   color: var(--color-brown);
   text-align: center;
   padding: var(--size-medium) var(--size-large);
-  border-bottom: 1px solid var(--color-tone-5);
+  border-bottom: 1px solid var(--color-gray-shade-30);
 }
 
 .HelpButton {
@@ -60,22 +60,27 @@
 
 .Layout {
   display: flex;
-  flex-direction: var(--game-layout-direction);
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   flex: 1 1 auto;
   overflow: auto;
+}
+
+@media only screen and (orientation: landscape) and (max-height: 500px) {
+  .Layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+  }
 }
 
 .Main {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  flex: 1 1 auto;
   overflow: auto;
-  position: relative;
-  width: 100%;
 }
 
 .Footer {
-  flex: 0 0 auto;
 }

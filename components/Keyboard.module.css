@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: var(--size-medium);
+  user-select: none;
 }
 
 .TopRow,
@@ -13,20 +14,19 @@
   margin: 0;
 }
 .TopRow {
-  grid-template-columns: repeat(10, 1fr) 3rem;
+  grid-template-columns: repeat(10, 1fr);
 }
 .MiddleRow {
-  grid-template-columns: repeat(9, 1fr) 3rem;
+  grid-template-columns: repeat(9, 1fr);
   margin: var(--size-small) 0;
 }
 .BottomRow {
-  grid-template-columns: repeat(7, 1fr);
-  padding-right: 3rem;
+  grid-template-columns: 3.5rem repeat(7, 1fr) 3.5rem;
 }
 
 .Key {
-  min-width: 2rem;
-  height: 2rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
   margin: 0;
   display: inline-flex;
   align-items: center;
@@ -36,19 +36,20 @@
   text-transform: capitalize;
   user-select: none;
   border: none;
-  background-color: var(--color-tone-4);
-  transition: background-color 250ms;
+  background-color: var(--color-gray-shade-40);
+  transition: background-color 150ms;
   cursor: pointer;
 }
 .Key:disabled {
-  background-color: var(--color-tone-6);
-  color: var(--color-tone-3);
+  background-color: var(--color-gray-shade-20);
+  color: var(--color-gray-shade-50);
   cursor: default;
 }
 .Key:hover:not(.Key:disabled) {
-  background-color: var(--color-tone-4-hover);
+  background-color: var(--color-gray-shade-50);
 }
 .Key:active:not(.Key:disabled) {
+  background-color: var(--color-gray-shade-40);
   position: relative;
   top: 1px;
 }
@@ -59,27 +60,43 @@
   color: var(--color-text);
 }
 .KeyCorrect:hover:not(.KeyCorrect:disabled) {
-  background-color: var(--color-correct-hover);
+  background-color: var(--color-correct-tint);
 }
+.KeyCorrect:active:not(.Key:disabled) {
+  background-color: var(--color-correct);
+}
+
 .KeyIncorrect,
 .KeyIncorrect:disabled {
   background-color: var(--color-incorrect);
   color: var(--color-text);
 }
 .KeyIncorrect:hover:not(.KeyIncorrect:disabled) {
-  background-color: var(--color-incorrect-hover);
+  background-color: var(--color-incorrect-tint);
 }
+.KeyIncorrect:active:not(.Key:disabled) {
+  background-color: var(--color-incorrect);
+}
+
 .KeyPresent,
 .KeyPresent:disabled {
   background-color: var(--color-present);
   color: var(--color-text);
 }
 .KeyPresent:hover:not(.KeyPresent:disabled) {
-  background-color: var(--color-present-hover);
+  background-color: var(--color-present-tint);
+}
+.KeyPresent:active:not(.Key:disabled) {
+  background-color: var(--color-present);
 }
 
-.DeleteIcon,
-.EnterIcon {
+.SpecialKey {
+}
+
+.SpecialKeyLabel {
+}
+
+.SpecialKeyIcon {
   width: var(--size-large);
   height: var(--size-large);
 }

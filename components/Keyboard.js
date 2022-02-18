@@ -61,7 +61,6 @@ export default function Keyboard({
             state={state}
           />
         ))}
-        <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
       </div>
       <div className={styles.MiddleRow}>
         {MIDDLE_ROW_LETTERS.map((letter) => (
@@ -72,9 +71,9 @@ export default function Keyboard({
             state={state}
           />
         ))}
-        <EnterKey submitPendingGuesses={submitPendingGuesses} state={state} />
       </div>
       <div className={styles.BottomRow}>
+        <EnterKey submitPendingGuesses={submitPendingGuesses} state={state} />
         {BOTTOM_ROW_LETTERS.map((letter) => (
           <LetterKey
             key={letter}
@@ -83,6 +82,7 @@ export default function Keyboard({
             state={state}
           />
         ))}
+        <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
       </div>
     </div>
   );
@@ -93,12 +93,12 @@ function DeleteKey({ deletePendingGuess, state }) {
 
   return (
     <button
-      className={`${styles.Key} ${styles.KeyAvailable}`}
+      className={`${styles.Key} ${styles.SpecialKey}`}
       disabled={endGameStatus || pendingGuesses.length === 0}
       onClick={deletePendingGuess}
       title="Delete"
     >
-      <Icon className={styles.DeleteIcon} type="delete" />
+      <Icon className={styles.SpecialKeyIcon} type="delete" />
     </button>
   );
 }
@@ -108,12 +108,12 @@ function EnterKey({ submitPendingGuesses, state }) {
 
   return (
     <button
-      className={`${styles.Key} ${styles.KeyAvailable}`}
+      className={`${styles.Key} ${styles.SpecialKey}`}
       disabled={endGameStatus || pendingGuesses.length !== 4}
       onClick={submitPendingGuesses}
       title="Submit guess"
     >
-      <Icon className={styles.EnterIcon} type="enter" />
+      <div className={styles.SpecialKeyLabel}>Enter</div>
     </button>
   );
 }

@@ -1,11 +1,11 @@
 .Tile {
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius);
-  border: 2px solid var(--color-tone-5);
+  border: 2px solid var(--color-gray-shade-30);
   text-transform: uppercase;
   background-color: var(--color-pending);
 }
@@ -30,7 +30,7 @@
   animation-name: incorrect;
 }
 .Pending {
-  border-color: var(--color-tone-3);
+  border-color: var(--color-gray-shade-50);
 }
 .Present {
   animation-name: present;

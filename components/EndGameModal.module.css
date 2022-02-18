@@ -42,13 +42,19 @@
 }
 
 .PlayAgainButton {
-  background-color: var(--color-tone-4);
+  background-color: var(--color-gray-shade-40);
   color: var(--color-text);
+}
+.PlayAgainButton:hover {
+  background-color: var(--color-gray-shade-50);
 }
 
 .ShareButton {
-  background-color: var(--color-correct);
+  background-color: var(--color-green);
   color: var(--color-text);
+}
+.ShareButton:hover {
+  background-color: var(--color-green-tint);
 }
 
 .ReplayIcon,
@@ -64,7 +70,7 @@
   right: var(--size-medium);
   border: none;
   background-color: transparent;
-  color: var(--color-tone-5);
+  color: var(--color-gray-shade-30);
   cursor: pointer;
 }
 
@@ -74,7 +80,7 @@
 }
 
 .History {
-  background: var(--color-tone-2);
+  background: var(--color-gray-shade-90);
   margin: var(--size-medium) 0;
   padding: var(--size-medium);
   border-radius: var(--border-radius);
