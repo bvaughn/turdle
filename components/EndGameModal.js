@@ -7,7 +7,6 @@ import {
   MAX_GUESSES,
 } from "../constants";
 import { copyEndGameStatus } from "../utils/copy";
-import { getTargetWord } from "../utils/words";
 import Icon from "./Icon";
 import styles from "./EndGameModal.module.css";
 
@@ -27,10 +26,6 @@ export default function EndGameModal({ dismissModal, restart, state }) {
   ) : (
     "Better luck next time!"
   );
-
-  const retry = () => {
-    restart(getTargetWord());
-  };
 
   const share = () => {
     copyEndGameStatus(state);
@@ -53,13 +48,15 @@ export default function EndGameModal({ dismissModal, restart, state }) {
         )}
 
         <div className={styles.Buttons}>
-          <button
-            className={`${styles.Button} ${styles.PlayAgainButton}`}
-            onClick={retry}
-          >
-            Play again
-            <Icon className={styles.ReplayIcon} type="replay" />
-          </button>
+          {state.wordList.length > 0 && (
+            <button
+              className={`${styles.Button} ${styles.PlayAgainButton}`}
+              onClick={restart}
+            >
+              Play again
+              <Icon className={styles.ReplayIcon} type="replay" />
+            </button>
+          )}
 
           {didWin && (
             <button

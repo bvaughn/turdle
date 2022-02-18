@@ -18,8 +18,8 @@ describe("useGameState", () => {
     submitPendingGuesses();
   }
 
-  function Component({ targetWord }) {
-    const result = useGameState(targetWord);
+  function Component({ wordList }) {
+    const result = useGameState(wordList);
 
     currentGameState = result.state;
 
@@ -32,8 +32,8 @@ describe("useGameState", () => {
     dismissModal = () => {
       act(() => result.dismissModal());
     };
-    restart = (targetWord) => {
-      act(() => result.restart(targetWord));
+    restart = () => {
+      act(() => result.restart());
     };
     submitPendingGuesses = () => {
       act(() => result.submitPendingGuesses());
@@ -43,7 +43,7 @@ describe("useGameState", () => {
   }
 
   beforeEach(() => {
-    create(createElement(Component, { targetWord: "test" }));
+    create(createElement(Component, { wordList: ["test", "poop", "turd"] }));
   });
 
   afterEach(() => {
@@ -68,9 +68,21 @@ describe("useGameState", () => {
     const { state } = currentGameState;
     guessWordHelper("test");
     expect(currentGameState.endGameStatus).toBe("won");
-    restart("next");
+    restart();
     expect(currentGameState.endGameStatus).toBeNull();
-    expect(currentGameState.targetWord).toBe("next");
+    expect(currentGameState.targetWord).toBe("poop");
+    guessWordHelper("poop");
+    expect(currentGameState.endGameStatus).toBe("won");
+    restart();
+    expect(currentGameState.endGameStatus).toBeNull();
+    expect(currentGameState.targetWord).toBe("turd");
+    guessWordHelper("turd");
+    expect(currentGameState.endGameStatus).toBe("won");
+
+    // We're out of words now.
+    const cloneState = {...currentGameState};
+    restart();
+    expect(currentGameState).toEqual(cloneState);
   });
 
   it("should support adding and deleting guesses", () => {

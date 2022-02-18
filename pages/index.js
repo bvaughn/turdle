@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Head from "next/head";
 import EndGameModal from "../components/EndGameModal";
 import Grid from "../components/Grid";
 import HelpModel from "../components/HelpModel";
 import Icon from "../components/Icon";
 import Keyboard from "../components/Keyboard";
-import useDefaultWord from "../hooks/useDefaultWord";
 import useGameState from "../hooks/useGameState";
+import { getWorList } from "../utils/words";
 import styles from "../styles/Home.module.css";
 
 const TITLE = "Turdle";
@@ -15,7 +15,7 @@ const URL = "https://turdle.app";
 const OG_IMAGE_URL = `${URL}/ogimage.png`;
 
 export default function Home() {
-  const defaultTargetWord = useDefaultWord();
+  const wordList = useMemo(() => getWorList(), []);
   const {
     addPendingGuess,
     deletePendingGuess,
@@ -23,7 +23,7 @@ export default function Home() {
     restart,
     state,
     submitPendingGuesses,
-  } = useGameState(defaultTargetWord);
+  } = useGameState(wordList);
 
   const [showHelp, setShowHelp] = useState(false);
 

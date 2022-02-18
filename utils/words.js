@@ -10,10 +10,16 @@ const WORD_LIST = [
   "turd",
 ];
 
-export function getTargetWord() {
-  // A true Wordle clone would use the GMT day as an index,
-  // but this variant is meant to be replayable multiple times a day.
-  const index = Math.floor(Math.random() * WORD_LIST.length);
+// A true Wordle clone would use the GMT day as an index,
+// but this variant is meant to be replayable multiple times a day...
+export function getWorList() {
+  return shuffle([...WORD_LIST]);
+}
 
-  return WORD_LIST[index];
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }

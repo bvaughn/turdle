@@ -53,8 +53,11 @@ const DEFAULT_STATE = {
   // which in turn is represented by an object with descriptive properties.
   submittedGuesses: [],
 
-  // This is the word being guessed.
+  // This is the word curently being guessed.
   targetWord: null,
+
+  // This is the list of remaining words to be guessed.
+  wordList: [],
 };
 
 function reduce(state, action) {
@@ -106,11 +109,16 @@ function reduce(state, action) {
     }
 
     case ACTION_TYPE_RESTART: {
-      const { targetWord } = payload;
+      const { wordList } = state;
+
+      if (wordList.length === 0) {
+        return state;
+      }
 
       return {
         ...DEFAULT_STATE,
-        targetWord,
+        targetWord: wordList[0],
+        wordList: wordList.slice(1),
       };
     }
 
@@ -206,10 +214,15 @@ function reduce(state, action) {
   }
 }
 
-export default function useGameState(targetWord) {
+export default function useGameState(wordList) {
+  if (wordList.length === 0) {
+    throw Error("Invalid word list provided");
+  }
+
   const [state, dispatch] = useReducer(reduce, {
     ...DEFAULT_STATE,
-    targetWord,
+    targetWord: wordList[0],
+    wordList: wordList.slice(1),
   });
 
   useEffect(() => {
