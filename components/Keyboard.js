@@ -1,9 +1,10 @@
 import Icon from "./Icon";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import InvalidGuessModal from "./InvalidGuessModal";
 import { STATUS_CORRECT, STATUS_INCORRECT, STATUS_PRESENT } from "../constants";
 import { copyEndGameStatus } from "../utils/copy";
 import { stopEvent } from "../utils/events";
-import { getTargetWord } from "../utils/words";
+import { isGuessValid } from "../utils/words";
 import styles from "./Keyboard.module.css";
 
 const TOP_ROW_LETTERS = "qwertyuiop".split("");
@@ -17,6 +18,19 @@ export default function Keyboard({
   state,
   submitPendingGuesses,
 }) {
+  const [invalidGuess, setInvalidGuess] = useState(null);
+
+  const dismissInvalidGuessModal = () => setInvalidGuess(null);
+
+  const submitValidGuess = () => {
+    const guessedWord = state.pendingGuesses.join("");
+    if (isGuessValid(guessedWord)) {
+      submitPendingGuesses();
+    } else {
+      setInvalidGuess(guessedWord);
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       const { ctrlKey, key, keyCode, metaKey } = event;
@@ -31,7 +45,7 @@ export default function Keyboard({
           stopEvent(event);
           break;
         case "Enter":
-          submitPendingGuesses();
+          submitValidGuess();
           stopEvent(event);
           break;
         default:
@@ -73,7 +87,7 @@ export default function Keyboard({
         ))}
       </div>
       <div className={styles.BottomRow}>
-        <EnterKey submitPendingGuesses={submitPendingGuesses} state={state} />
+        <EnterKey state={state} submitValidGuess={submitValidGuess} />
         {BOTTOM_ROW_LETTERS.map((letter) => (
           <LetterKey
             key={letter}
@@ -84,6 +98,13 @@ export default function Keyboard({
         ))}
         <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
       </div>
+
+      {invalidGuess != null && (
+        <InvalidGuessModal
+          dismissModal={dismissInvalidGuessModal}
+          word={invalidGuess}
+        />
+      )}
     </div>
   );
 }
@@ -103,14 +124,14 @@ function DeleteKey({ deletePendingGuess, state }) {
   );
 }
 
-function EnterKey({ submitPendingGuesses, state }) {
+function EnterKey({ state, submitValidGuess }) {
   const { endGameStatus, pendingGuesses } = state;
 
   return (
     <button
       className={`${styles.Key} ${styles.SpecialKey}`}
       disabled={endGameStatus || pendingGuesses.length !== 4}
-      onClick={submitPendingGuesses}
+      onClick={submitValidGuess}
       title="Submit guess"
     >
       <div className={styles.SpecialKeyLabel}>Enter</div>

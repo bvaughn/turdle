@@ -18,6 +18,13 @@ describe("useGameState", () => {
     submitPendingGuesses();
   }
 
+  function deleteGuessedWord() {
+    deletePendingGuess();
+    deletePendingGuess();
+    deletePendingGuess();
+    deletePendingGuess();
+  }
+
   function Component({ wordList }) {
     const result = useGameState(wordList);
 
@@ -43,7 +50,7 @@ describe("useGameState", () => {
   }
 
   beforeEach(() => {
-    create(createElement(Component, { wordList: ["test", "poop", "turd"] }));
+    create(createElement(Component, { wordList: ["caca", "poop", "turd"] }));
   });
 
   afterEach(() => {
@@ -61,12 +68,20 @@ describe("useGameState", () => {
     expect(currentGameState.letterKeys).toEqual({});
     expect(currentGameState.pendingGuesses).toHaveLength(0);
     expect(currentGameState.submittedGuesses).toHaveLength(0);
-    expect(currentGameState.targetWord).toEqual("test");
+    expect(currentGameState.targetWord).toEqual("caca");
+  });
+
+  it("should only accept guesses that are valid words", () => {
+    guessWordHelper("test"); // Not a valid poop word
+    expect(currentGameState.submittedGuesses).toHaveLength(0);
+    deleteGuessedWord();
+    guessWordHelper("poop"); // Valid poop word
+    expect(currentGameState.submittedGuesses).toHaveLength(1);
   });
 
   it("should advance through the word list until there are no more", () => {
     const { state } = currentGameState;
-    guessWordHelper("test");
+    guessWordHelper("caca");
     expect(currentGameState.endGameStatus).toBe("won");
 
     restart();
@@ -86,10 +101,10 @@ describe("useGameState", () => {
     restart();
     expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.targetWord).toBe("poop");
-    guessWordHelper("aaaa");
-    guessWordHelper("bbbb");
-    guessWordHelper("cccc");
-    guessWordHelper("dddd");
+    guessWordHelper("scat");
+    guessWordHelper("scat");
+    guessWordHelper("scat");
+    guessWordHelper("scat");
     expect(currentGameState.endGameStatus).toBe("lost");
 
     restart(true);
@@ -99,9 +114,9 @@ describe("useGameState", () => {
     expect(currentGameState.endGameStatus).toBe("won");
 
     // We're out of words now.
-    const cloneState = {...currentGameState};
+    const clonedState = { ...currentGameState };
     restart();
-    expect(currentGameState).toEqual(cloneState);
+    expect(currentGameState).toEqual(clonedState);
   });
 
   it("should support adding and deleting guesses", () => {
@@ -127,12 +142,14 @@ describe("useGameState", () => {
   });
 
   it("should correctly update guessed state", () => {
-    guessWordHelper("sttt");
+    guessWordHelper("shat");
     expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
       Object {
-        "s": "present",
-        "t": "correct",
+        "a": "present",
+        "h": "incorrect",
+        "s": "incorrect",
+        "t": "incorrect",
       }
     `);
     expect(currentGameState.submittedGuesses).toMatchInlineSnapshot(`
@@ -140,31 +157,35 @@ describe("useGameState", () => {
         Array [
           Array [
             "s",
-            "present",
+            "incorrect",
           ],
           Array [
-            "t",
+            "h",
+            "incorrect",
+          ],
+          Array [
+            "a",
             "present",
           ],
           Array [
             "t",
             "incorrect",
-          ],
-          Array [
-            "t",
-            "correct",
           ],
         ],
       ]
     `);
 
-    guessWordHelper("tset");
+    guessWordHelper("crap");
     expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
       Object {
-        "e": "present",
-        "s": "present",
-        "t": "correct",
+        "a": "present",
+        "c": "correct",
+        "h": "incorrect",
+        "p": "incorrect",
+        "r": "incorrect",
+        "s": "incorrect",
+        "t": "incorrect",
       }
     `);
     expect(currentGameState.submittedGuesses).toMatchInlineSnapshot(`
@@ -172,50 +193,52 @@ describe("useGameState", () => {
         Array [
           Array [
             "s",
-            "present",
+            "incorrect",
           ],
           Array [
-            "t",
+            "h",
+            "incorrect",
+          ],
+          Array [
+            "a",
             "present",
           ],
           Array [
             "t",
             "incorrect",
           ],
-          Array [
-            "t",
-            "correct",
-          ],
         ],
         Array [
           Array [
-            "t",
+            "c",
             "correct",
           ],
           Array [
-            "s",
+            "r",
+            "incorrect",
+          ],
+          Array [
+            "a",
             "present",
           ],
           Array [
-            "e",
-            "present",
-          ],
-          Array [
-            "t",
-            "correct",
+            "p",
+            "incorrect",
           ],
         ],
       ]
     `);
 
-    guessWordHelper("taes");
-    expect(currentGameState.endGameStatus).toBeNull();
+    guessWordHelper("caca");
     expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
       Object {
-        "a": "incorrect",
-        "e": "present",
-        "s": "present",
-        "t": "correct",
+        "a": "correct",
+        "c": "correct",
+        "h": "incorrect",
+        "p": "incorrect",
+        "r": "incorrect",
+        "s": "incorrect",
+        "t": "incorrect",
       }
     `);
     expect(currentGameState.submittedGuesses).toMatchInlineSnapshot(`
@@ -223,89 +246,55 @@ describe("useGameState", () => {
         Array [
           Array [
             "s",
-            "present",
+            "incorrect",
           ],
           Array [
-            "t",
+            "h",
+            "incorrect",
+          ],
+          Array [
+            "a",
             "present",
           ],
           Array [
             "t",
             "incorrect",
           ],
+        ],
+        Array [
           Array [
-            "t",
+            "c",
             "correct",
+          ],
+          Array [
+            "r",
+            "incorrect",
+          ],
+          Array [
+            "a",
+            "present",
+          ],
+          Array [
+            "p",
+            "incorrect",
           ],
         ],
         Array [
           Array [
-            "t",
-            "correct",
-          ],
-          Array [
-            "s",
-            "present",
-          ],
-          Array [
-            "e",
-            "present",
-          ],
-          Array [
-            "t",
-            "correct",
-          ],
-        ],
-        Array [
-          Array [
-            "t",
+            "c",
             "correct",
           ],
           Array [
             "a",
-            "incorrect",
-          ],
-          Array [
-            "e",
-            "present",
-          ],
-          Array [
-            "s",
-            "present",
-          ],
-        ],
-      ]
-    `);
-  });
-
-  // https://github.com/bvaughn/turdle/issues/3
-  it("should correctly update guessed state", () => {
-    restart("poop");
-    guessWordHelper("ppoo");
-    expect(currentGameState.letterKeys).toMatchInlineSnapshot(`
-      Object {
-        "o": "correct",
-        "p": "correct",
-      }
-    `);
-    expect(currentGameState.submittedGuesses).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Array [
-            "p",
             "correct",
           ],
           Array [
-            "p",
-            "present",
-          ],
-          Array [
-            "o",
+            "c",
             "correct",
           ],
           Array [
-            "o",
-            "present",
+            "a",
+            "correct",
           ],
         ],
       ]
@@ -313,7 +302,7 @@ describe("useGameState", () => {
   });
 
   it("should mark a game as completed (won)", () => {
-    guessWordHelper("test");
+    guessWordHelper("caca");
     expect(currentGameState.endGameStatus).toEqual("won");
     expect(currentGameState.showEndGameModal).toBe(true);
     dismissModal();
@@ -321,13 +310,13 @@ describe("useGameState", () => {
   });
 
   it("should mark a game as completed (lost)", () => {
-    guessWordHelper("aaaa");
+    guessWordHelper("scat");
     expect(currentGameState.endGameStatus).toBeNull();
-    guessWordHelper("bbbb");
+    guessWordHelper("scat");
     expect(currentGameState.endGameStatus).toBeNull();
-    guessWordHelper("cccc");
+    guessWordHelper("scat");
     expect(currentGameState.endGameStatus).toBeNull();
-    guessWordHelper("dddd");
+    guessWordHelper("scat");
     expect(currentGameState.endGameStatus).toEqual("lost");
     expect(currentGameState.showEndGameModal).toBe(true);
     dismissModal();
@@ -339,11 +328,7 @@ describe("useGameState", () => {
       submitPendingGuesses();
       expect(currentGameState.submittedGuesses).toHaveLength(0);
 
-      addPendingGuess("a");
-      submitPendingGuesses();
-      expect(currentGameState.submittedGuesses).toHaveLength(0);
-
-      addPendingGuess("b");
+      addPendingGuess("s");
       submitPendingGuesses();
       expect(currentGameState.submittedGuesses).toHaveLength(0);
 
@@ -351,7 +336,11 @@ describe("useGameState", () => {
       submitPendingGuesses();
       expect(currentGameState.submittedGuesses).toHaveLength(0);
 
-      addPendingGuess("d");
+      addPendingGuess("a");
+      submitPendingGuesses();
+      expect(currentGameState.submittedGuesses).toHaveLength(0);
+
+      addPendingGuess("t");
       submitPendingGuesses();
       expect(currentGameState.submittedGuesses).toHaveLength(1);
     });
@@ -363,7 +352,7 @@ describe("useGameState", () => {
     });
 
     it("should not allow modifying a completed game", () => {
-      guessWordHelper("test");
+      guessWordHelper("caca");
       expect(currentGameState.endGameStatus).toEqual("won");
 
       const completedState = { ...currentGameState };

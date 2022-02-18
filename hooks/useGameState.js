@@ -3,6 +3,7 @@ import {
   localStorageGetItem,
   localStorageSetItem,
 } from "../utils/localStorage";
+import { isGuessValid } from "../utils/words";
 import {
   COMPLETE_STATUS_LOST,
   COMPLETE_STATUS_WON,
@@ -145,6 +146,11 @@ function reduce(state, action) {
         return state;
       }
 
+      const newWord = pendingGuesses.join("");
+      if (!isGuessValid(newWord)) {
+        return state;
+      }
+
       let newEndGameStatus = null;
 
       const targetWordLetterCount = {};
@@ -200,7 +206,6 @@ function reduce(state, action) {
         }
       }
 
-      const newWord = pendingGuesses.join("");
       if (newWord === targetWord) {
         newEndGameStatus = COMPLETE_STATUS_WON;
       } else if (submittedGuesses.length === MAX_GUESSES - 1) {

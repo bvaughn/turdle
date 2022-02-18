@@ -5,6 +5,7 @@ const WORD_LIST = [
   "dung",
   "poop",
   "scat",
+  "shat",
   "shit",
   "soil",
   "turd",
@@ -12,8 +13,12 @@ const WORD_LIST = [
 
 // A true Wordle clone would use the GMT day as an index,
 // but this variant is meant to be replayable multiple times a day...
-export function getWorList() {
+export function getRandomWordList() {
   return shuffle([...WORD_LIST]);
+}
+
+export function isGuessValid(word) {
+  return WORD_LIST.includes(word);
 }
 
 function shuffle(array) {
