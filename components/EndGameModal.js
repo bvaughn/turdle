@@ -18,18 +18,25 @@ export default function EndGameModal({ dismissModal, restart, state }) {
   }
 
   const didWin = state.endGameStatus === COMPLETE_STATUS_WON;
+  const hasMoreWordsToGuess = state.wordList.length > 0 || !didWin;
 
   const text = didWin ? (
     <>
-      <strong>Congratulations!</strong> You won!
+      <strong>Congratulations!</strong> You won! 🎉
     </>
   ) : (
-    "Better luck next time!"
+    <>
+      <strong>So close!</strong> You'll get it next time! ❤️
+    </>
   );
 
   const share = () => {
     copyEndGameStatus(state);
     setDidCopy(true);
+  };
+
+  const replay = () => {
+    restart(!didWin);
   };
 
   return (
@@ -41,6 +48,26 @@ export default function EndGameModal({ dismissModal, restart, state }) {
           <Icon className={styles.CloseIcon} type="close" />
         </button>
 
+        {!hasMoreWordsToGuess && (
+          <>
+            <div className={styles.EmptyWordList}>
+              You've also guessed all of our 💩 words!
+            </div>
+            <div className={styles.EmptyWordList}>
+              (If we missed one, please
+              <a
+                className={styles.EmptyWordListLink}
+                href="https://github.com/bvaughn/turdle/issues/new?title=New%20poop%20word&labels=enhancement"
+                rel="noreferrer"
+                target="_blank"
+              >
+                tell us
+              </a>
+              !)
+            </div>
+          </>
+        )}
+
         <History />
 
         {didCopy && (
@@ -48,10 +75,10 @@ export default function EndGameModal({ dismissModal, restart, state }) {
         )}
 
         <div className={styles.Buttons}>
-          {state.wordList.length > 0 && (
+          {hasMoreWordsToGuess && (
             <button
               className={`${styles.Button} ${styles.PlayAgainButton}`}
-              onClick={restart}
+              onClick={replay}
             >
               Play again
               <Icon className={styles.ReplayIcon} type="replay" />

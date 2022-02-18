@@ -32,8 +32,8 @@ describe("useGameState", () => {
     dismissModal = () => {
       act(() => result.dismissModal());
     };
-    restart = () => {
-      act(() => result.restart());
+    restart = (reuseWord) => {
+      act(() => result.restart(reuseWord));
     };
     submitPendingGuesses = () => {
       act(() => result.submitPendingGuesses());
@@ -64,19 +64,38 @@ describe("useGameState", () => {
     expect(currentGameState.targetWord).toEqual("test");
   });
 
-  it("should restart correctly", () => {
+  it("should advance through the word list until there are no more", () => {
     const { state } = currentGameState;
     guessWordHelper("test");
     expect(currentGameState.endGameStatus).toBe("won");
+
     restart();
     expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.targetWord).toBe("poop");
     guessWordHelper("poop");
     expect(currentGameState.endGameStatus).toBe("won");
-    restart();
+
+    restart(true); // Re-add "poop" to the end of the queue
     expect(currentGameState.endGameStatus).toBeNull();
     expect(currentGameState.targetWord).toBe("turd");
     guessWordHelper("turd");
+    expect(currentGameState.endGameStatus).toBe("won");
+
+    // At this point, there will be only one word left in our list.
+    // Let's fail it and see if we can try again.
+    restart();
+    expect(currentGameState.endGameStatus).toBeNull();
+    expect(currentGameState.targetWord).toBe("poop");
+    guessWordHelper("aaaa");
+    guessWordHelper("bbbb");
+    guessWordHelper("cccc");
+    guessWordHelper("dddd");
+    expect(currentGameState.endGameStatus).toBe("lost");
+
+    restart(true);
+    expect(currentGameState.endGameStatus).toBeNull();
+    expect(currentGameState.targetWord).toBe("poop");
+    guessWordHelper("poop");
     expect(currentGameState.endGameStatus).toBe("won");
 
     // We're out of words now.

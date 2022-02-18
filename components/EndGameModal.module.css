@@ -126,3 +126,15 @@
 .HistoryEmptyBox {
   background-color: var(--color-incorrect);
 }
+
+.EmptyWordList {
+  font-size: var(--font-size-3);
+}
+.EmptyWordList:last-of-type {
+  margin-bottom: var(--size-medium);
+}
+
+.EmptyWordListLink {
+  margin-left: var(--size-small);
+  color: var(--color-link);
+}

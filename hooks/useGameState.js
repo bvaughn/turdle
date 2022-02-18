@@ -109,16 +109,24 @@ function reduce(state, action) {
     }
 
     case ACTION_TYPE_RESTART: {
-      const { wordList } = state;
+      const { reuseWord } = payload;
+      const { targetWord, wordList } = state;
 
-      if (wordList.length === 0) {
+      const newWordList = [...wordList];
+
+      // Add it back, but to the end of the list.
+      if (reuseWord) {
+        newWordList.push(targetWord);
+      }
+
+      if (newWordList.length === 0) {
         return state;
       }
 
       return {
         ...DEFAULT_STATE,
-        targetWord: wordList[0],
-        wordList: wordList.slice(1),
+        targetWord: newWordList[0],
+        wordList: newWordList.slice(1),
       };
     }
 
@@ -266,8 +274,8 @@ export default function useGameState(wordList) {
     dispatch({ type: ACTION_TYPE_DISMISS_MODAL });
   });
 
-  const restart = useCallback((targetWord) => {
-    dispatch({ type: ACTION_TYPE_RESTART, payload: { targetWord } });
+  const restart = useCallback((reuseWord = false) => {
+    dispatch({ type: ACTION_TYPE_RESTART, payload: { reuseWord } });
   });
 
   const submitPendingGuesses = useCallback(() => {

@@ -26,6 +26,8 @@
   --color-gray-shade-90: color(#000000 tint(90%));
   --color-gray-shade-100: color(#000000 tint(100%));
 
+  --color-blue: #3865c2;
+  --color-blue-tint: color(#3865c2 tint(10%));
   --color-brown: #915f38;
   --color-brown-tint: color(#915f38 tint(10%));
   --color-green: #538d4e;
@@ -34,6 +36,7 @@
   --color-yellow-tint: color(#b59f3b tint(10%));
 
   --color-text: var(--color-gray-shade-100);
+  --color-link: var(--color-blue);
 
   --color-pending: var(--color-gray-shade-10);
   --color-pending-tint: var(--color-gray-shade-20);
