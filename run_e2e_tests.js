@@ -51,7 +51,10 @@ function build() {
 
   logBright("Building project");
 
-  buildProcess = spawn("yarn", ["build"], { cwd: ROOT_PATH });
+  buildProcess = spawn("npm", ["run", "build"], {
+    ...process.env,
+    cwd: ROOT_PATH,
+  });
   buildProcess.stdout.on("data", (data) => {
     logDim(data);
   });
@@ -89,7 +92,7 @@ function runServer() {
 
   const localEnv = readFileSync("./.env.local", { encoding: "utf8" });
 
-  serverProcess = spawn("yarn", ["start"], {
+  serverProcess = spawn("npm", ["run", "start"], {
     cwd: ROOT_PATH,
     env: { ...process.env, ...localEnv },
   });
@@ -134,7 +137,10 @@ function runServer() {
 async function runEndToEndTests() {
   logBright("Running e2e tests");
 
-  testProcess = spawn("yarn", ["playwright"], { cwd: ROOT_PATH });
+  testProcess = spawn("npm", ["run", "playwright"], {
+    ...process.env,
+    cwd: ROOT_PATH,
+  });
   testProcess.stdout.on("data", (data) => {
     // Log without formatting because Playwright applies its own formatting.
     const formatted = format(data);
