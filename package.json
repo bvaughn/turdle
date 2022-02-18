@@ -5,7 +5,7 @@
     "build": "next build",
     "playwright": "playwright test --config=playwright.config.js",
     "playwright:install": "npx playwright install chromium",
-    "prettier": "prettier --write \"{components,hooks,pages,styles,utils}/**/*.{js,json,css}\"",
+    "prettier": "prettier --write \"{__tests__,components,hooks,pages,styles,utils}/**/*.{js,json,css}\" && prettier --write \"*.{js,json,css}\"",
     "start": "next start",
     "test": "jest",
     "test:watch": "jest --watch",

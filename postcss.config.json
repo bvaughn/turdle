@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    "postcss-color-function"
-  ]
+  "plugins": ["postcss-color-function"]
 }

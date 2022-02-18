@@ -2,28 +2,34 @@ const { expect } = require("@playwright/test");
 
 async function clickButton(page, testName) {
   await page.evaluate(async (targetTestName) => {
-    const button = document.querySelector(`[data-testname="${targetTestName}"]`);
+    const button = document.querySelector(
+      `[data-testname="${targetTestName}"]`
+    );
     button.click();
   }, testName);
 }
 
 async function isButtonEnabled(page, testName) {
   return await page.evaluate(async (targetTestName) => {
-    const button = document.querySelector(`[data-testname="${targetTestName}"]`);
+    const button = document.querySelector(
+      `[data-testname="${targetTestName}"]`
+    );
     return !button.disabled;
   }, testName);
 }
 
 async function isElementVisisble(page, testName) {
   return await page.evaluate(async (targetTestName) => {
-    return document.querySelector(`[data-testname="${targetTestName}"]`) != null;
+    return (
+      document.querySelector(`[data-testname="${targetTestName}"]`) != null
+    );
   }, testName);
 }
 
-async function loadPage(page, wordList = ['turd']) {
-  let url = 'http://localhost:3000';
+async function loadPage(page, wordList = ["turd"]) {
+  let url = "http://localhost:3000";
   if (wordList) {
-    url += `?wordList=${wordList.join(',')}`;
+    url += `?wordList=${wordList.join(",")}`;
   }
 
   await page.goto(url, { waitUntil: "domcontentloaded" });

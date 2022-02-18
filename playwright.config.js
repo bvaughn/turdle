@@ -10,7 +10,7 @@ const config = {
   reporter: "html",
 
   testDir: "__tests__/playwright",
-  testMatch: '**/*-test.js',
+  testMatch: "**/*-test.js",
 
   use: {
     // Uncomment for easier local debugging
@@ -24,7 +24,7 @@ const config = {
     viewport: {
       width: 700,
       height: 350,
-    }
+    },
   },
 };
 
