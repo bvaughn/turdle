@@ -18,11 +18,17 @@ export default function Keyboard({
   state,
   submitPendingGuesses,
 }) {
+  const { endGameStatus, pendingGuesses } = state;
+
   const [invalidGuess, setInvalidGuess] = useState(null);
 
   const dismissInvalidGuessModal = () => setInvalidGuess(null);
 
   const submitValidGuess = () => {
+    if (endGameStatus || pendingGuesses.length !== 4) {
+      return;
+    }
+
     const guessedWord = state.pendingGuesses.join("");
     if (isGuessValid(guessedWord)) {
       submitPendingGuesses();
@@ -65,7 +71,7 @@ export default function Keyboard({
   });
 
   return (
-    <div className={styles.Keyboard}>
+    <div className={styles.Keyboard} data-testname="Keyboard">
       <div className={styles.TopRow}>
         {TOP_ROW_LETTERS.map((letter) => (
           <LetterKey
@@ -115,6 +121,7 @@ function DeleteKey({ deletePendingGuess, state }) {
   return (
     <button
       className={`${styles.Key} ${styles.SpecialKey}`}
+      data-testname="DeleteKey"
       disabled={endGameStatus || pendingGuesses.length === 0}
       onClick={deletePendingGuess}
       title="Delete"
@@ -130,6 +137,7 @@ function EnterKey({ state, submitValidGuess }) {
   return (
     <button
       className={`${styles.Key} ${styles.SpecialKey}`}
+      data-testname="EnterKey"
       disabled={endGameStatus || pendingGuesses.length !== 4}
       onClick={submitValidGuess}
       title="Submit guess"
@@ -161,6 +169,7 @@ function LetterKey({ addPendingGuess, letter, state }) {
   return (
     <button
       className={classNames.join(" ")}
+      data-testname={`Key-${letter}`}
       disabled={disabled}
       onClick={handleClick}
       title="Share score"

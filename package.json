@@ -3,25 +3,30 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "playwright": "playwright test --config=playwright.config.js",
+    "playwright:install": "npx playwright install chromium",
     "prettier": "prettier --write \"{components,hooks,pages,styles,utils}/**/*.{js,json,css}\"",
     "start": "next start",
-    "test": "jest __tests__/**/*.js",
-    "test:watch": "jest --watch __tests__/**/*.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "next lint"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "jest": "^27.5.1",
-    "next": "^12.0.10",
     "react": "^18.0.0-rc.0",
     "react-dom": "^18.0.0-rc.0",
     "react-test-renderer": "^18.0.0-rc.0",
     "scheduler": "^0.21.0-rc.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@playwright/test": "^1.20.0-alpha-feb-18-2022",
     "eslint": "8.7.0",
     "eslint-config-next": "^12.0.8",
+    "jest": "^27.5.1",
+    "next": "^12.0.10",
+    "playwright-aws-lambda": "^0.7.0",
+    "playwright-core": "^1.17.1",
     "postcss-color-function": "^4.1.0",
     "prettier": "^2.5.1"
   }

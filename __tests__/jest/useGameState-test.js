@@ -1,6 +1,6 @@
 import { createElement } from "react";
 import { act, create } from "react-test-renderer";
-import useGameState from "../hooks/useGameState";
+import useGameState from "../../hooks/useGameState";
 
 describe("useGameState", () => {
   let addPendingGuess = null;

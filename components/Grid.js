@@ -35,5 +35,9 @@ export default function Grid({ state }) {
     }
   }
 
-  return <div className={styles.Grid}>{children}</div>;
+  return (
+    <div className={styles.Grid} data-testname="Grid">
+      {children}
+    </div>
+  );
 }

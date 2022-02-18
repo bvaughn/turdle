@@ -14,8 +14,21 @@ const DESCRIPTION = "A game about poop";
 const URL = "https://turdle.app";
 const OG_IMAGE_URL = `${URL}/ogimage.png`;
 
-export default function Home() {
-  const wordList = useMemo(() => getRandomWordList(), []);
+export async function getServerSideProps({ query }) {
+  let wordList = null;
+  if (query.wordList) {
+    wordList = query.wordList.split(",");
+  }
+
+  return {
+    props: {
+      wordList,
+    },
+  };
+}
+
+export default function Home({ wordList }) {
+  const randomWordList = useMemo(() => getRandomWordList(), []);
   const {
     addPendingGuess,
     deletePendingGuess,
@@ -23,7 +36,7 @@ export default function Home() {
     restart,
     state,
     submitPendingGuesses,
-  } = useGameState(wordList);
+  } = useGameState(wordList || randomWordList);
 
   const [showHelp, setShowHelp] = useState(false);
 

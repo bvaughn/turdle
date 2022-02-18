@@ -40,11 +40,19 @@ export default function EndGameModal({ dismissModal, restart, state }) {
   };
 
   return (
-    <Modal className={styles.DelayFadeIn} dismissModal={dismissModal}>
+    <Modal
+      className={styles.DelayFadeIn}
+      dismissModal={dismissModal}
+      testName="EndGameModal"
+    >
       <div className={styles.Content}>
         <div className={styles.Header}>{text}</div>
 
-        <button className={styles.CloseButton} onClick={dismissModal}>
+        <button
+          className={styles.CloseButton}
+          data-testname="DismissButton"
+          onClick={dismissModal}
+        >
           <Icon className={styles.CloseIcon} type="close" />
         </button>
 
@@ -78,6 +86,7 @@ export default function EndGameModal({ dismissModal, restart, state }) {
           {hasMoreWordsToGuess && (
             <button
               className={`${styles.Button} ${styles.PlayAgainButton}`}
+              data-testname="ReplayButton"
               onClick={replay}
             >
               Play again
@@ -88,6 +97,7 @@ export default function EndGameModal({ dismissModal, restart, state }) {
           {didWin && (
             <button
               className={`${styles.Button} ${styles.ShareButton}`}
+              data-testname="ShareButton"
               onClick={share}
             >
               Share

@@ -11,8 +11,12 @@ import styles from "./HelpModal.module.css";
 
 export default function HelpModal({ dismissModal }) {
   return (
-    <Modal dismissModal={dismissModal}>
-      <button className={styles.CloseButton} onClick={dismissModal}>
+    <Modal dismissModal={dismissModal} testName="HelpModal">
+      <button
+        className={styles.CloseButton}
+        data-testname="DismissButton"
+        onClick={dismissModal}
+      >
         <Icon className={styles.CloseIcon} type="close" />
       </button>
 

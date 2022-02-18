@@ -30,5 +30,9 @@ export default function Tile({ letter, status }) {
     classNames.push(styles.Empty);
   }
 
-  return <div className={classNames.join(" ")}>{letter}</div>;
+  return (
+    <div className={classNames.join(" ")} data-testname="Tile">
+      {letter}
+    </div>
+  );
 }
