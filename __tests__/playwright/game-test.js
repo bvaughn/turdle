@@ -1,5 +1,9 @@
 const { test, expect } = require("@playwright/test");
-const { clickButton, loadPage } = require("./utils/general");
+const {
+  clickButton,
+  getElementBoundingRect,
+  loadPage,
+} = require("./utils/general");
 const { takeGridScreenshot } = require("./utils/grid");
 const {
   enterWord,
@@ -8,6 +12,7 @@ const {
   takeKeyboardScreenshot,
 } = require("./utils/keyboard");
 const {
+  closeOpenModal,
   takeEndGameModalScreenshot,
   takeInvalidGuessModalScreenshot,
 } = require("./utils/modals");
@@ -34,13 +39,45 @@ test.describe("game", () => {
     test("should accept input from the on-screen keyboard", async ({
       page,
     }) => {
-      await enterWord(page, "poop", true);
+      await enterWord(page, "caca", true);
       await pressKey(page, "Enter");
+      await takeGridScreenshot(page, "on-screen-keyboard-input.png");
     });
 
     test("should accept input from the physical keyboard", async ({ page }) => {
-      await enterWord(page, "poop", false);
+      await enterWord(page, "caca", false);
       await pressKey(page, "Enter");
+      await takeGridScreenshot(page, "physical-keyboard-input.png");
+    });
+
+    test("should visually show keys pressing down", async ({ page }) => {
+      const rect = await getElementBoundingRect(page, "Key-a");
+      const x = rect.x + rect.width / 2;
+      const y = rect.y + rect.height / 2;
+      const padding = 4;
+      const clip = {
+        x: rect.x - padding,
+        y: rect.y - padding,
+        width: rect.width + padding * 2,
+        height: rect.height + padding * 2,
+      };
+
+      const takeScreenshot = async (name) => {
+        expect(
+          await page.screenshot({ clip, disableAnimations: true })
+        ).toMatchSnapshot(["keyboard", "key", name]);
+      };
+
+      await takeScreenshot("key-a-1-default.png");
+
+      await page.mouse.move(x, y);
+      await takeScreenshot("key-a-2-hover.png");
+
+      await page.mouse.down();
+      await takeScreenshot("key-a-3-down.png");
+
+      await page.mouse.up();
+      await takeScreenshot("key-a-4-up.png");
     });
   });
 
@@ -85,7 +122,7 @@ test.describe("game", () => {
     await takeEndGameModalScreenshot(page, "end-of-game-lost.png");
 
     // Dismiss the end-of-game modal before taking a screenshot of the grid.
-    await clickButton(page, "DismissButton");
+    await closeOpenModal(page);
 
     await takeGridScreenshot(page, "guess-4.png");
   });

@@ -8,7 +8,10 @@ export default function Modal({ children, className, dismissModal, testName }) {
   useModalDismissSignal(ref, dismissModal, true);
 
   return (
-    <div className={`${styles.Background} ${className || ""}`}>
+    <div
+      className={`${styles.Background} ${className || ""}`}
+      data-testname="ModalBackground"
+    >
       <div ref={ref} className={styles.Dialog} data-testname={testName}>
         {children}
       </div>

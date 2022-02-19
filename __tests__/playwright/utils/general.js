@@ -9,6 +9,21 @@ async function clickButton(page, testName) {
   }, testName);
 }
 
+async function getElementBoundingRect(page, testName) {
+  return page.evaluate((targetTestName) => {
+    const element = document.querySelector(
+      `[data-testname="${targetTestName}"]`
+    );
+    const rect = element.getBoundingClientRect();
+    return {
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+    };
+  }, testName);
+}
+
 async function isButtonEnabled(page, testName) {
   return await page.evaluate(async (targetTestName) => {
     const button = document.querySelector(
@@ -48,6 +63,7 @@ async function takeScreenshot(page, testName, ...path) {
 
 module.exports = {
   clickButton,
+  getElementBoundingRect,
   isButtonEnabled,
   isElementVisisble,
   loadPage,
