@@ -1,0 +1,94 @@
+.Content {
+  min-width: 16rem;
+}
+
+.Header {
+  margin-bottom: var(--size-medium);
+}
+
+.CloseButton,
+.OpenPastGameButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.CloseButton {
+  position: absolute;
+  top: var(--size-medium);
+  right: var(--size-medium);
+  color: var(--color-gray-shade-30);
+}
+
+.OpenPastGameButton {
+  color: var(--color-gray-shade-10);
+  margin-right: var(--size-small);
+  display: flex;
+}
+
+.CloseIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.HistoryList {
+  display: grid;
+  grid-template-columns: 3rem auto 6rem;
+  align-items: center;
+  grid-gap: var(--size-small);
+  font-size: var(--font-size-2);
+  cursor: pointer;
+  padding: var(--size-tiny) 0;
+  border-radius: var(--border-radius);
+}
+
+.PastGameWord {
+  font-weight: bold;
+  text-decoration: underline;
+  color: var(--color-link);
+}
+
+.PastGameStatus {
+  display: flex;
+}
+
+.PastGameTime {
+  font-size: var(--font-size-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+.ViewIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.HistoryList:hover {
+  background-color: var(--color-gray-shade-95);
+}
+
+.HistoryList:hover .PastGameWord {
+  text-decoration: none;
+  color: var(--color-link-hover);
+}
+
+.BlockWon,
+.BlockLost {
+  display: inline-block;
+  width: var(--size-large);
+  height: var(--size-large);
+  margin-right: var(--size-tiny);
+}
+.BlockWon {
+  background-color: var(--color-correct);
+}
+.BlockLost {
+  background-color: var(--color-incorrect);
+}
+
+.AdditionalCount {
+  font-size: var(--font-size-2);
+  margin-top: var(--size-medium);
+}

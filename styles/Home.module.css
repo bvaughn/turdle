@@ -11,10 +11,13 @@
 }
 
 .Header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.5rem 1.5rem 1.5rem auto 1.5rem 1.5rem;
   align-items: center;
-  justify-content: center;
+  grid-gap: var(--size-small);
+
   flex: 0 0 auto;
+
   font-size: var(--font-size-5);
   color: var(--color-brown);
   text-align: center;
@@ -22,29 +25,30 @@
   border-bottom: 1px solid var(--color-gray-shade-30);
 }
 
-.HelpButton {
-  flex: 0 0 auto;
+.Button {
   background-color: transparent;
   border: none;
   color: var(--color-text);
   display: flex;
   cursor: pointer;
 }
+.Button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 
 .TitleLink {
-  flex: 1 1 auto;
   text-align: center;
 }
 
 .GitHubLink {
-  flex: 0 0 auto;
 }
 
-.HelpIcon,
+.Icon,
 .GitHubIcon {
   color: var(--color-text);
 }
-.HelpIcon {
+.Icon {
   width: 1.25rem;
   height: 1.25rem;
 }

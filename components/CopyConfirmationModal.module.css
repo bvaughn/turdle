@@ -1,0 +1,36 @@
+.CloseButton {
+  position: absolute;
+  top: var(--size-medium);
+  right: var(--size-medium);
+  border: none;
+  background-color: transparent;
+  color: var(--color-gray-shade-30);
+  cursor: pointer;
+}
+
+.CloseIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.Header {
+  margin-bottom: var(--size-medium);
+  font-weight: bold;
+}
+
+.Message {
+  margin-bottom: var(--size-medium);
+}
+
+.Button {
+  font-size: var(--font-size-5);
+  padding: var(--size-medium) var(--size-large);
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-gray-shade-40);
+  color: var(--color-text);
+}
+.Button:hover {
+  background-color: var(--color-gray-shade-50);
+}

@@ -2,7 +2,6 @@ import Icon from "./Icon";
 import { useEffect, useState } from "react";
 import InvalidGuessModal from "./InvalidGuessModal";
 import { STATUS_CORRECT, STATUS_INCORRECT, STATUS_PRESENT } from "../constants";
-import { copyEndGameStatus } from "../utils/copy";
 import { stopEvent } from "../utils/events";
 import { isGuessValid } from "../utils/words";
 import styles from "./Keyboard.module.css";

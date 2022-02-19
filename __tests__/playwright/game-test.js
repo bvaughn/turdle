@@ -2,6 +2,7 @@ const { test, expect } = require("@playwright/test");
 const {
   clickButton,
   getElementBoundingRect,
+  getElementEnabled,
   loadPage,
 } = require("./utils/general");
 const { takeGridScreenshot } = require("./utils/grid");
@@ -158,5 +159,44 @@ test.describe("game", () => {
     await enterWord(page, "turd");
     await pressKey(page, "Enter");
     await takeEndGameModalScreenshot(page, "end-of-game-win-3.png");
+  });
+
+  test("should support viewing recent games", async ({ page }) => {
+    await takeGridScreenshot(page, "history-new-game.png");
+
+    let historyButtonEnabled = await getElementEnabled(page, "HistoryButton");
+    expect(historyButtonEnabled).toBe(false);
+
+    await loadPage(page, ["poop", "crap", "turd"]);
+    await enterWord(page, "poop");
+    await pressKey(page, "Enter");
+    await clickButton(page, "DismissButton");
+    await takeGridScreenshot(page, "history-first-game.png");
+
+    await clickButton(page, "NewGameButton");
+
+    historyButtonEnabled = await getElementEnabled(page, "HistoryButton");
+    expect(historyButtonEnabled).toBe(true);
+
+    await enterWord(page, "shit");
+    await pressKey(page, "Enter");
+    await enterWord(page, "crap");
+    await pressKey(page, "Enter");
+    await clickButton(page, "DismissButton");
+    await takeGridScreenshot(page, "history-second-game.png");
+
+    // View first game.
+    await clickButton(page, "HistoryButton");
+    await clickButton(page, "HistoryListItem", 1);
+    await takeGridScreenshot(page, "history-first-game.png");
+
+    // View second game.
+    await clickButton(page, "HistoryButton");
+    await clickButton(page, "HistoryListItem", 0);
+    await takeGridScreenshot(page, "history-second-game.png");
+
+    // Start new game.
+    await clickButton(page, "NewGameButton");
+    await takeGridScreenshot(page, "history-new-game.png");
   });
 });

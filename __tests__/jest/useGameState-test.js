@@ -1,12 +1,17 @@
 import { createElement } from "react";
 import { act, create } from "react-test-renderer";
+import { LOCAL_STORAGE_KEY_GAME_STATS } from "../../constants";
+import { localStorageGetItem } from "../../utils/localStorage";
 import useGameState from "../../hooks/useGameState";
 
 describe("useGameState", () => {
+  let testRendererInstance = null;
+
   let addPendingGuess = null;
   let currentGameState = null;
   let deletePendingGuess = null;
   let dismissModal = null;
+  let loadPastGame = null;
   let restart = null;
   let submitPendingGuesses = null;
 
@@ -39,6 +44,9 @@ describe("useGameState", () => {
     dismissModal = () => {
       act(() => result.dismissModal());
     };
+    loadPastGame = (pastGame) => {
+      act(() => result.loadPastGame(pastGame));
+    };
     restart = (reuseWord) => {
       act(() => result.restart(reuseWord));
     };
@@ -50,10 +58,35 @@ describe("useGameState", () => {
   }
 
   beforeEach(() => {
-    create(createElement(Component, { wordList: ["caca", "poop", "turd"] }));
+    class LocalStorageMock {
+      _store = {};
+      clear() {
+        this._store = {};
+      }
+      getItem(key) {
+        return this._store[key] || null;
+      }
+      setItem(key, value) {
+        this._store[key] = String(value);
+      }
+      removeItem(key) {
+        delete this._store[key];
+      }
+    }
+
+    global.localStorage = new LocalStorageMock();
+
+    testRendererInstance = create(
+      createElement(Component, { wordList: ["caca", "poop", "turd"] })
+    );
   });
 
   afterEach(() => {
+    testRendererInstance.unmount();
+    testRendererInstance = null;
+
+    global.localStorage = null;
+
     addPendingGuess = null;
     currentGameState = null;
     deletePendingGuess = null;
@@ -321,6 +354,118 @@ describe("useGameState", () => {
     expect(currentGameState.showEndGameModal).toBe(true);
     dismissModal();
     expect(currentGameState.showEndGameModal).toBe(false);
+  });
+
+  describe("history", () => {
+    function getGameStats() {
+      const raw = localStorageGetItem(LOCAL_STORAGE_KEY_GAME_STATS);
+      return raw !== null ? JSON.parse(raw) : null;
+    }
+
+    it("should record game stats to localStorage", () => {
+      let gameStats;
+
+      localStorage.clear();
+
+      guessWordHelper("caca");
+      expect(currentGameState.endGameStatus).toBe("won");
+
+      gameStats = getGameStats();
+      expect(gameStats.lostCount).toBe(0);
+      expect(gameStats.wonCount).toBe(1);
+      expect(gameStats.history).toHaveLength(1);
+      expect(gameStats.guessDistribution).toMatchInlineSnapshot(`
+        Object {
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+        }
+      `);
+
+      restart();
+      guessWordHelper("shit");
+      guessWordHelper("shit");
+      guessWordHelper("shit");
+      guessWordHelper("shit");
+      expect(currentGameState.endGameStatus).toBe("lost");
+
+      gameStats = getGameStats();
+      expect(gameStats.lostCount).toBe(1);
+      expect(gameStats.wonCount).toBe(1);
+      expect(gameStats.history).toHaveLength(2);
+      expect(gameStats.guessDistribution).toMatchInlineSnapshot(`
+        Object {
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+        }
+      `);
+
+      restart(true); // Put the word we just lost back into the queue.
+      guessWordHelper("crap");
+      guessWordHelper("turd");
+      expect(currentGameState.endGameStatus).toBe("won");
+
+      gameStats = getGameStats();
+      expect(gameStats.lostCount).toBe(1);
+      expect(gameStats.wonCount).toBe(2);
+      expect(gameStats.history).toHaveLength(3);
+      expect(gameStats.guessDistribution).toMatchInlineSnapshot(`
+        Object {
+          "1": 1,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+        }
+      `);
+
+      const clonedGameStats = { ...gameStats };
+      const clonedWordList = [...currentGameState.wordList];
+
+      // Restore a previous game.
+      loadPastGame(gameStats.history[1]);
+      expect(currentGameState.submittedGuesses).toHaveLength(4);
+      expect(currentGameState.endGameStatus).toBe("lost");
+
+      // This should not affect the remaining word list.
+      expect(currentGameState.wordList).toEqual(clonedWordList);
+
+      // Load the first game (last in history)
+      loadPastGame(gameStats.history[2]);
+      expect(currentGameState.submittedGuesses).toHaveLength(1);
+      expect(currentGameState.endGameStatus).toBe("won");
+
+      // Load the most recent game (first in history)
+      loadPastGame(gameStats.history[0]);
+      expect(currentGameState.submittedGuesses).toHaveLength(2);
+      expect(currentGameState.endGameStatus).toBe("won");
+
+      // Start a new game.
+      restart();
+      expect(currentGameState.endGameStatus).toBe(null);
+      expect(currentGameState.wordList).not.toEqual(clonedWordList);
+
+      // Verify that no new history entries were added by the previous actions.
+      expect(getGameStats()).toEqual(clonedGameStats);
+
+      guessWordHelper("poop");
+      expect(currentGameState.endGameStatus).toBe("won");
+
+      gameStats = getGameStats();
+      expect(gameStats.lostCount).toBe(1);
+      expect(gameStats.wonCount).toBe(3);
+      expect(gameStats.history).toHaveLength(4);
+      expect(gameStats.guessDistribution).toMatchInlineSnapshot(`
+        Object {
+          "1": 2,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+        }
+      `);
+    });
   });
 
   describe("validation", () => {

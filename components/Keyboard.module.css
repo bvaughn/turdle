@@ -10,7 +10,7 @@
 .MiddleRow,
 .BottomRow {
   display: inline-grid;
-  grid-gap: var(--size-small);
+  grid-gap: var(--size-tiny);
   margin: 0;
 }
 .TopRow {
@@ -18,7 +18,7 @@
 }
 .MiddleRow {
   grid-template-columns: repeat(9, 1fr);
-  margin: var(--size-small) 0;
+  margin: var(--size-tiny) 0;
 }
 .BottomRow {
   grid-template-columns: 3.5rem repeat(7, 1fr) 3.5rem;

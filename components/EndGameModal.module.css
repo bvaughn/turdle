@@ -11,7 +11,7 @@
 }
 
 .CopiedToClipboard {
-  background-color: lightyellow;
+  background-color: var(--color-hint);
   border-radius: var(--border-radius);
   margin-bottom: var(--size-medium);
   padding: var(--size-small);

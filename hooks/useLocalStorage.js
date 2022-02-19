@@ -13,7 +13,7 @@ export default function useLocalStorage(key, initialValue) {
         window.removeEventListener("storage", callback);
       };
     },
-    function getSnapshot() {
+    function getClientSnapshot() {
       try {
         return localStorageGetItem(key);
       } catch (error) {
@@ -21,6 +21,9 @@ export default function useLocalStorage(key, initialValue) {
       }
 
       return typeof initialValue === "function" ? initialValue() : initialValue;
+    },
+    function getServerSnapshot() {
+      return null;
     }
   );
 

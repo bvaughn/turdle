@@ -1,4 +1,4 @@
-const { clickButton, isButtonEnabled, takeScreenshot } = require("./general");
+const { clickButton, getElementEnabled, takeScreenshot } = require("./general");
 
 async function enterWord(page, word, useOnScreenKeyboard = true) {
   if (useOnScreenKeyboard) {
@@ -27,7 +27,7 @@ async function isKeyEnabled(page, letterOrKeyName) {
       break;
   }
 
-  return isButtonEnabled(page, testName);
+  return getElementEnabled(page, testName);
 }
 
 async function pressKey(page, letterOrKeyName, useOnScreenKeyboard = true) {

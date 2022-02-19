@@ -16,7 +16,7 @@ const config = {
     // Uncomment for easier local debugging
     // headless: false,
     // launchOptions: {
-    //   slowMo: 500,
+    //   slowMo: 250,
     // },
 
     browserName: "chromium",

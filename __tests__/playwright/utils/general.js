@@ -1,12 +1,18 @@
 const { expect } = require("@playwright/test");
 
-async function clickButton(page, testName) {
-  await page.evaluate(async (targetTestName) => {
-    const button = document.querySelector(
-      `[data-testname="${targetTestName}"]`
-    );
-    button.click();
-  }, testName);
+async function clickButton(page, testName, index) {
+  await page.evaluate(
+    async ({ index, testName }) => {
+      let selector = `[data-testname="${testName}"]`;
+      if (index != null) {
+        selector += `:nth-of-type(${index + 1})`;
+      }
+
+      const button = document.querySelector(selector);
+      button.click();
+    },
+    { index, testName }
+  );
 }
 
 async function getElementBoundingRect(page, testName) {
@@ -24,7 +30,7 @@ async function getElementBoundingRect(page, testName) {
   }, testName);
 }
 
-async function isButtonEnabled(page, testName) {
+async function getElementEnabled(page, testName) {
   return await page.evaluate(async (targetTestName) => {
     const button = document.querySelector(
       `[data-testname="${targetTestName}"]`
@@ -33,7 +39,7 @@ async function isButtonEnabled(page, testName) {
   }, testName);
 }
 
-async function isElementVisisble(page, testName) {
+async function getElementVisisble(page, testName) {
   return await page.evaluate(async (targetTestName) => {
     return (
       document.querySelector(`[data-testname="${targetTestName}"]`) != null
@@ -64,8 +70,8 @@ async function takeScreenshot(page, testName, ...path) {
 module.exports = {
   clickButton,
   getElementBoundingRect,
-  isButtonEnabled,
-  isElementVisisble,
+  getElementEnabled,
+  getElementVisisble,
   loadPage,
   takeScreenshot,
 };

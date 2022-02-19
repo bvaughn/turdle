@@ -6,7 +6,8 @@ import {
   LOCAL_STORAGE_KEY_GAME_STATS,
   MAX_GUESSES,
 } from "../constants";
-import { copyEndGameStatus } from "../utils/copy";
+import { copyTextToClipboard } from "../utils/copy";
+import { gameStateToCopyString } from "../utils/game";
 import Icon from "./Icon";
 import styles from "./EndGameModal.module.css";
 
@@ -31,7 +32,8 @@ export default function EndGameModal({ dismissModal, restart, state }) {
   );
 
   const share = () => {
-    copyEndGameStatus(state);
+    const textToCopy = gameStateToCopyString(state);
+    copyTextToClipboard(textToCopy);
     setDidCopy(true);
   };
 

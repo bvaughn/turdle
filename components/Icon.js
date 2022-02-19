@@ -15,6 +15,12 @@ export default function Icon({ className = "", type }) {
     case "help":
       path = HELP_PATH;
       break;
+    case "history":
+      path = HISTORY_PATH;
+      break;
+    case "new":
+      path = NEW_PATH;
+      break;
     case "share":
       path = SHARE_PATH;
       break;
@@ -46,6 +52,14 @@ const ENTER_PATH = `
 
 const HELP_PATH = `
   M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z
+`;
+
+const HISTORY_PATH = `
+  M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M9 17H7V10H9V17M13 17H11V7H13V17M17 17H15V13H17V17Z
+`;
+
+const NEW_PATH = `
+  M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z
 `;
 
 const REPLAY_PATH = `

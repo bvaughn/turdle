@@ -1,6 +1,8 @@
 export const COMPLETE_STATUS_WON = "won";
 export const COMPLETE_STATUS_LOST = "lost";
 
+export const MAX_HISTORY_SIZE = 10;
+
 export const GUESS_LENGTH = 4;
 export const MAX_GUESSES = 4;
 

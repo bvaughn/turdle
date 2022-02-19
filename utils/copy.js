@@ -5,26 +5,7 @@ import {
   STATUS_PRESENT,
 } from "../constants";
 
-export function copyEndGameStatus(state) {
-  const textToCopy =
-    `https://turdle.app (${state.submittedGuesses.length}/${MAX_GUESSES})\n\n` +
-    state.submittedGuesses
-      .map((guess) => {
-        return guess
-          .map(([_, status]) => {
-            switch (status) {
-              case STATUS_CORRECT:
-                return "🟩";
-              case STATUS_INCORRECT:
-                return "⬛";
-              case STATUS_PRESENT:
-                return "🟨";
-            }
-          })
-          .join("");
-      })
-      .join("\n");
-
+export function copyTextToClipboard(textToCopy) {
   try {
     copyTextNavigatorClipboard(textToCopy);
   } catch (error) {

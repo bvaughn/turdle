@@ -1,5 +1,5 @@
 :root {
-  --size-tiny: 0.125rem;
+  --size-tiny: 2px;
   --size-small: 0.25rem;
   --size-medium: 0.5rem;
   --size-large: 1rem;
@@ -24,6 +24,7 @@
   --color-gray-shade-70: color(#000000 tint(70%));
   --color-gray-shade-80: color(#000000 tint(80%));
   --color-gray-shade-90: color(#000000 tint(90%));
+  --color-gray-shade-95: color(#000000 tint(95%));
   --color-gray-shade-100: color(#000000 tint(100%));
 
   --color-blue: #3865c2;
@@ -35,13 +36,15 @@
   --color-yellow: #b59f3b;
   --color-yellow-tint: color(#b59f3b tint(10%));
 
+  --color-hint: lightyellow;
   --color-text: var(--color-gray-shade-100);
   --color-link: var(--color-blue);
+  --color-link-hover: var(--color-blue-tint);
 
   --color-pending: var(--color-gray-shade-10);
   --color-pending-tint: var(--color-gray-shade-20);
-  --color-incorrect: var(--color-gray-shade-20);
-  --color-incorrect-tint: var(--color-gray-shade-30);
+  --color-incorrect: var(--color-gray-shade-30);
+  --color-incorrect-tint: var(--color-gray-shade-40);
   --color-correct: var(--color-green);
   --color-correct-tint: var(--color-green-tint);
   --color-present: var(--color-yellow);

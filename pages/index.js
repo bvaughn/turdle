@@ -1,12 +1,21 @@
 import { useMemo, useState } from "react";
 import Head from "next/head";
+import CopyConfirmationModal from "../components/CopyConfirmationModal";
 import EndGameModal from "../components/EndGameModal";
 import Grid from "../components/Grid";
 import HelpModal from "../components/HelpModal";
+import HistoryModal from "../components/HistoryModal";
 import Icon from "../components/Icon";
 import Keyboard from "../components/Keyboard";
 import useGameState from "../hooks/useGameState";
+import { copyTextToClipboard } from "../utils/copy";
+import { gameStateToCopyString } from "../utils/game";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { getRandomWordList } from "../utils/words";
+import {
+  COMPLETE_STATUS_WON,
+  LOCAL_STORAGE_KEY_GAME_STATS,
+} from "../constants";
 import styles from "../styles/Home.module.css";
 
 const TITLE = "Turdle";
@@ -22,30 +31,62 @@ export async function getServerSideProps({ query }) {
 
   return {
     props: {
-      wordList,
+      initialWordList: wordList,
     },
   };
 }
 
-export default function Home({ wordList }) {
+export default function Home({ initialWordList }) {
   const randomWordList = useMemo(() => getRandomWordList(), []);
   const {
     addPendingGuess,
     deletePendingGuess,
     dismissModal,
+    loadPastGame,
     restart,
     state,
     submitPendingGuesses,
-  } = useGameState(wordList || randomWordList);
+  } = useGameState(initialWordList || randomWordList);
 
+  const [showCopyConfirmation, setShowCopyConfirmation] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
-  const dismissHelpModal = () => {
+  const dismissModals = () => {
     setShowHelp(false);
+    setShowHistory(false);
+    setShowCopyConfirmation(false);
   };
 
   const showHelpModal = () => {
     setShowHelp(true);
+  };
+
+  const showHistoryModal = () => {
+    setShowHistory(true);
+  };
+
+  const shareGame = () => {
+    const textToCopy = gameStateToCopyString(state);
+    copyTextToClipboard(textToCopy);
+    setShowCopyConfirmation(true);
+  };
+
+  const { endGameStatus, isPastGame, wordList } = state;
+
+  const hasMoreWordsToGuess = wordList.length > 0;
+
+  const [gameStats] = useLocalStorage(LOCAL_STORAGE_KEY_GAME_STATS);
+  const hasItemsInHistory =
+    gameStats && gameStats.history && gameStats.history.length > 0;
+
+  const startNewGame = () => {
+    if (isPastGame) {
+      restart();
+    } else {
+      // Save the current word for later if there's still guessing in progress.
+      restart(!endGameStatus);
+    }
   };
 
   return (
@@ -92,24 +133,62 @@ export default function Home({ wordList }) {
       </Head>
 
       <header className={styles.Header}>
-        <button className={styles.HelpButton} onClick={showHelpModal}>
-          <Icon className={styles.HelpIcon} type="help" />
+        <button
+          className={styles.Button}
+          data-testname="NewGameButton"
+          disabled={!hasMoreWordsToGuess}
+          onClick={startNewGame}
+          title="Start new game"
+        >
+          <Icon className={styles.Icon} type="new" />
         </button>
 
-        <a
-          className={styles.TitleLink}
-          href="https://github.com/bvaughn/turdle"
-          rel="noreferrer"
-          target="_blank"
+        <button
+          className={styles.Button}
+          data-testname="HistoryButton"
+          disabled={!hasItemsInHistory}
+          onClick={showHistoryModal}
+          title="View recent games"
         >
-          <span className={styles.Turd}>Turd</span>le 💩
-        </a>
+          <Icon className={styles.Icon} type="history" />
+        </button>
+
+        <button
+          className={styles.Button}
+          data-testname="ShareButton"
+          disabled={!endGameStatus}
+          onClick={shareGame}
+          title="Share game"
+        >
+          <Icon className={styles.Icon} type="share" />
+        </button>
+
+        <section>
+          <a
+            className={styles.TitleLink}
+            href="https://github.com/bvaughn/turdle"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <span className={styles.Turd}>Turd</span>le 💩
+          </a>
+        </section>
+
+        <button
+          className={styles.Button}
+          data-testname="HelpButton"
+          onClick={showHelpModal}
+          title="Help"
+        >
+          <Icon className={styles.Icon} type="help" />
+        </button>
 
         <a
           className={styles.GitHubLink}
           href="https://github.com/bvaughn/turdle"
           rel="noreferrer"
           target="_blank"
+          title="View source"
         >
           <GitHubIcon />
         </a>
@@ -125,7 +204,17 @@ export default function Home({ wordList }) {
             state={state}
           />
 
-          {showHelp && <HelpModal dismissModal={dismissHelpModal} />}
+          {showHelp && <HelpModal dismissModal={dismissModals} />}
+          {showHistory && (
+            <HistoryModal
+              dismissModal={dismissModals}
+              loadPastGame={loadPastGame}
+              state={state}
+            />
+          )}
+          {showCopyConfirmation && (
+            <CopyConfirmationModal dismissModal={dismissModals} />
+          )}
         </main>
 
         <footer className={styles.Footer}>
