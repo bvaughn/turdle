@@ -5,6 +5,7 @@ const WORD_LIST = [
   "dump",
   "dung",
   "fart",
+  "lump",
   "poop",
   "scat",
   "shat",
