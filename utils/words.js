@@ -2,6 +2,7 @@ const WORD_LIST = [
   "caca",
   "crap",
   "dirt",
+  "dump",
   "dung",
   "poop",
   "scat",
