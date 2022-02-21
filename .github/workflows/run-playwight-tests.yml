@@ -35,5 +35,5 @@ jobs:
       - name: Archive trace artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Playwright traces
-          path: ./__tests__/playwright/traces
+          name: Playwright test results
+          path: test-results

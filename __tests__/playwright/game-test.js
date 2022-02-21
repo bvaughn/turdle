@@ -27,13 +27,7 @@ const {
 
 test.describe("game", () => {
   test.beforeEach(async ({ context, page }) => {
-    await context.tracing.start({ screenshots: true, snapshots: true });
     await loadPage(page);
-  });
-
-  test.afterEach(async ({ context }, { title }) => {
-    const path = join(__dirname, "traces", title.replace(/\s/g, "-") + ".zip");
-    await context.tracing.stop({ path });
   });
 
   test.describe("input", () => {

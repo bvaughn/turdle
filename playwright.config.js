@@ -12,6 +12,7 @@ const config = {
 
   testDir: "__tests__/playwright",
   testMatch: "**/*-test.js",
+  outputDir: "test-results/",
 
   use: {
     // Uncomment for easier local debugging
