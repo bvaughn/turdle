@@ -135,13 +135,14 @@ function Keyboard({
         <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
       </div>
 
-      {invalidGuess != null && createPortal(
-        <InvalidGuessModal
-          dismissModal={dismissInvalidGuessModal}
-          word={invalidGuess}
-        />,
-        modalContainerRef.current,
-      )}
+      {invalidGuess != null &&
+        createPortal(
+          <InvalidGuessModal
+            dismissModal={dismissInvalidGuessModal}
+            word={invalidGuess}
+          />,
+          modalContainerRef.current
+        )}
     </div>
   );
 }

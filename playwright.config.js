@@ -7,7 +7,7 @@ const config = {
     },
   },
 
-  reporter: "html",
+  reporter: process.env.CI ? "github" : "html",
 
   testDir: "__tests__/playwright",
   testMatch: "**/*-test.js",
