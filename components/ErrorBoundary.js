@@ -8,9 +8,15 @@ import {
 import styles from "./ErrorBoundary.module.css";
 
 export default class ErrorBoundary extends Component {
-  state = {
-    error: null,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      error: null,
+    };
+
+    this._resetLocalStorage = this._resetLocalStorage.bind(this);
+  }
 
   static getDerivedStateFromError(error) {
     return { error };
@@ -53,10 +59,10 @@ export default class ErrorBoundary extends Component {
     }
   }
 
-  _resetLocalStorage = () => {
+  _resetLocalStorage() {
     localStorageRemoveItem(LOCAL_STORAGE_SETTINGS);
     localStorageRemoveItem(LOCAL_STORAGE_KEY_GAME_STATS);
 
     this.setState({ error: null });
-  };
+  }
 }
