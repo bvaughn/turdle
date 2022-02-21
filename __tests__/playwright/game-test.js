@@ -26,8 +26,14 @@ const {
 } = require("./utils/modals");
 
 test.describe("game", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ context, page }) => {
+    await context.tracing.start({ screenshots: true, snapshots: true });
     await loadPage(page);
+  });
+
+  test.afterEach(async ({ context }, { title }) => {
+    const path = join(__dirname, "traces", title.replace(/\s/g, "-") + ".zip");
+    await context.tracing.stop({ path });
   });
 
   test.describe("input", () => {
@@ -41,7 +47,7 @@ test.describe("game", () => {
 
       await enterWord(page, "poop");
 
-      await takeKeyboardScreenshot(page, "enabled-valid-guess.png");
+      await takeGridScreenshot(page, "guess-3.png");
     });
 
     test("should accept input from the on-screen keyboard", async ({

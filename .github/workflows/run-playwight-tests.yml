@@ -32,3 +32,8 @@ jobs:
       - name: Run e2e tests
         run: |
           ./run_e2e_tests.js
+      - name: Archive trace artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Playwright traces
+          path: ./__tests__/playwright/traces

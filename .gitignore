@@ -32,3 +32,4 @@ yarn-error.log*
 # Playwright
 playwright-report*
 test-results
+__tests__/playwright/traces

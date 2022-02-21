@@ -7,7 +7,8 @@ const config = {
     },
   },
 
-  reporter: process.env.CI ? "github" : "html",
+  reporter: process.env.CI ? "github" : "list",
+  retries: process.env.CI ? 2 : 0,
 
   testDir: "__tests__/playwright",
   testMatch: "**/*-test.js",
@@ -20,6 +21,9 @@ const config = {
     // },
 
     browserName: "chromium",
+
+    trace: "on-first-retry",
+    video: "on-first-retry",
 
     viewport: {
       width: 700,
