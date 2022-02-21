@@ -33,6 +33,7 @@ jobs:
         run: |
           ./run_e2e_tests.js
       - name: Archive trace artifacts
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: Playwright test results
