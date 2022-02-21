@@ -10,6 +10,11 @@
   background-color: var(--color-gray-shade-10);
 }
 
+.Modals {
+  width: 100%;
+  height: 100%;
+}
+
 .Header {
   display: grid;
   grid-template-columns: repeat(3, 1.5rem) auto repeat(3, 1.5rem);
@@ -63,28 +68,39 @@
 }
 
 .Layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  flex: 1 1 auto;
-  overflow: auto;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.Main,
+.Footer {
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+.Main {
+  top: 0;
+  bottom: 50%;
+}
+.Footer {
+  top: 50%;
+  bottom: 0;
 }
 
 @media only screen and (orientation: landscape) and (max-height: 500px) {
-  .Layout {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
+  .Main,
+  .Footer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
   }
-}
-
-.Main {
-  display: flex;
-  justify-content: center;
-  overflow: auto;
-}
-
-.Footer {
+  .Main {
+    left: 0;
+    right: 50%;
+  }
+  .Footer {
+    left: 50%;
+    right: 0;
+  }
 }

@@ -1,6 +1,4 @@
 .Tile {
-  width: 4rem;
-  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;

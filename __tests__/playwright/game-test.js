@@ -94,9 +94,9 @@ test.describe("game", () => {
   }) => {
     await enterWord(page, "test");
     await pressKey(page, "Enter");
-    await takeKeyboardScreenshot(page, "invalid-guess.png");
     await takeInvalidGuessModalScreenshot(page, "invalid-guess-modal.png");
     await clickButton(page, "RetryButton");
+    await takeKeyboardScreenshot(page, "invalid-guess.png");
     await expect(
       page.locator('[data-testname="InvalidGuessModal"]')
     ).toBeHidden();
@@ -295,6 +295,18 @@ test.describe("game", () => {
 
     test("400 x 600", async ({ page }) => {
       await takeFullPageScreenshot(page, 400, 600);
+    });
+
+    test("500 x 300", async ({ page }) => {
+      await takeFullPageScreenshot(page, 500, 300);
+    });
+
+    test("300 x 300", async ({ page }) => {
+      await takeFullPageScreenshot(page, 300, 300);
+    });
+
+    test("1000 x 600", async ({ page }) => {
+      await takeFullPageScreenshot(page, 1000, 600);
     });
   });
 });
