@@ -1,3 +1,4 @@
+const { join } = require("path");
 const { test, expect } = require("@playwright/test");
 const {
   clickButton,
@@ -260,5 +261,40 @@ test.describe("game", () => {
     // Clear session data
     await clickButton(page, "DeleteSessionDataButton");
     expect(await getElementVisisble(page, "ErrorBoundary")).toBe(false);
+  });
+
+  test.describe("layouts", () => {
+    async function takeFullPageScreenshot(page, width, height) {
+      // const viewport={ width, height };
+      // const context = browser.new_context(viewport);
+
+      page.setViewportSize({ width, height });
+
+      await page.screenshot({
+        path: join(
+          __dirname,
+          "game-test.js-snapshots",
+          "layout",
+          `${width}-by-${height}.png`
+        ),
+        fullPage: true,
+      });
+    }
+
+    test("1200 x 800", async ({ page }) => {
+      await takeFullPageScreenshot(page, 1200, 800);
+    });
+
+    test("720 x 350", async ({ page }) => {
+      await takeFullPageScreenshot(page, 720, 350);
+    });
+
+    test("870 x 520", async ({ page }) => {
+      await takeFullPageScreenshot(page, 870, 520);
+    });
+
+    test("400 x 600", async ({ page }) => {
+      await takeFullPageScreenshot(page, 400, 600);
+    });
   });
 });
