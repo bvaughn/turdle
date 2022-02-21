@@ -27,6 +27,7 @@ const WORD_LISTS = {
     "drops",
     "dumps",
     "farts",
+    "farty",
     "fecal",
     "feces",
     "filth",
