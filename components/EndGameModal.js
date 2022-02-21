@@ -119,40 +119,34 @@ function History() {
   }
 
   const { lostCount, guessDistribution, wonCount } = gameStats;
+  if (wonCount === 0) {
+    return null;
+  }
 
   const winPercentage = Math.round(100 * (wonCount / (wonCount + lostCount)));
   const header = `You've won ${winPercentage}% of the games you've played!`;
 
   let maxGuessCount = 0;
   for (let i = 1; i <= MAX_GUESSES; i++) {
-    maxGuessCount = Math.max(maxGuessCount, guessDistribution[i]);
+    maxGuessCount = Math.max(maxGuessCount, guessDistribution[i] || 0);
+  }
+
+  const listItems = [];
+  for (let i = 1; i <= MAX_GUESSES; i++) {
+    listItems.push(
+      <HistoryListItem
+        key={i}
+        guessCount={guessDistribution[i] || 0}
+        label={i}
+        maxGuessCount={maxGuessCount}
+      />
+    );
   }
 
   return (
     <div className={styles.History}>
       <div className={styles.HistoryHeader}>{header}</div>
-      <ul className={styles.HistoryList}>
-        <HistoryListItem
-          guessCount={guessDistribution[1]}
-          label={1}
-          maxGuessCount={maxGuessCount}
-        />
-        <HistoryListItem
-          guessCount={guessDistribution[2]}
-          label={2}
-          maxGuessCount={maxGuessCount}
-        />
-        <HistoryListItem
-          guessCount={guessDistribution[3]}
-          label={3}
-          maxGuessCount={maxGuessCount}
-        />
-        <HistoryListItem
-          guessCount={guessDistribution[4]}
-          label={4}
-          maxGuessCount={maxGuessCount}
-        />
-      </ul>
+      <ul className={styles.HistoryList}>{listItems}</ul>
     </div>
   );
 }

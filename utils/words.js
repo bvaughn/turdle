@@ -1,27 +1,75 @@
-const WORD_LIST = [
-  "caca",
-  "crap",
-  "dirt",
-  "dump",
-  "dung",
-  "fart",
-  "lump",
-  "poop",
-  "scat",
-  "shat",
-  "shit",
-  "soil",
-  "turd",
-];
+const WORD_LISTS = {
+  3: ["ass", "bum", "pie", "poo"],
+  4: [
+    "butt",
+    "caca",
+    "crap",
+    "dirt",
+    "dump",
+    "dung",
+    "fart",
+    "lump",
+    "muck",
+    "plop",
+    "poop",
+    "scat",
+    "shat",
+    "shit",
+    "soil",
+    "turd",
+  ],
+  5: [
+    "asses",
+    "brown",
+    "butts",
+    "cacas",
+    "craps",
+    "drops",
+    "dumps",
+    "farts",
+    "fecal",
+    "feces",
+    "filth",
+    "guano",
+    "plops",
+    "poops",
+    "poopy",
+    "scats",
+    "shits",
+    "stool",
+    "turds",
+    "waste",
+  ],
+  6: [
+    "cowpie",
+    "crappy",
+    "doodoo",
+    "egesta",
+    "faeces",
+    "jobbie",
+    "manure",
+    "ordure",
+    "sewage",
+    "shitty",
+    "stools",
+  ],
+};
 
 // A true Wordle clone would use the GMT day as an index,
 // but this variant is meant to be replayable multiple times a day...
-export function getRandomWordList() {
-  return shuffle([...WORD_LIST]);
+export function getRandomWordList(length = 4) {
+  const validWords = WORD_LISTS[length];
+
+  if (!validWords) {
+    throw Error(`Invalid length ${length}`);
+  }
+
+  return shuffle(validWords);
 }
 
 export function isGuessValid(word) {
-  return WORD_LIST.includes(word);
+  const validWords = WORD_LISTS[word.length];
+  return validWords ? validWords.includes(word) : false;
 }
 
 function shuffle(array) {

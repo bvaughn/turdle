@@ -1,19 +1,20 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import CopyConfirmationModal from "../components/CopyConfirmationModal";
 import EndGameModal from "../components/EndGameModal";
-import Grid from "../components/Grid";
 import HelpModal from "../components/HelpModal";
 import HistoryModal from "../components/HistoryModal";
 import Icon from "../components/Icon";
 import Keyboard from "../components/Keyboard";
+import SettingsModal from "../components/SettingsModal";
 import useGameState from "../hooks/useGameState";
 import { copyTextToClipboard } from "../utils/copy";
 import { gameStateToCopyString } from "../utils/game";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { getRandomWordList } from "../utils/words";
 import {
   COMPLETE_STATUS_WON,
+  DEFAULT_WORD_LENGTH,
   LOCAL_STORAGE_KEY_GAME_STATS,
 } from "../constants";
 import styles from "../styles/Home.module.css";
@@ -29,33 +30,44 @@ export async function getServerSideProps({ query }) {
     wordList = query.wordList.split(",");
   }
 
+  let wordLength = null;
+  if (query.wordLength) {
+    wordLength = parseInt(query.wordLength);
+  }
+
   return {
     props: {
+      initialWordLength: wordLength,
       initialWordList: wordList,
     },
   };
 }
 
-export default function Home({ initialWordList }) {
-  const randomWordList = useMemo(() => getRandomWordList(), []);
+export default function Home({ initialWordLength, initialWordList }) {
   const {
     addPendingGuess,
     deletePendingGuess,
     dismissModal,
     loadPastGame,
     restart,
+    saveSettings,
     state,
     submitPendingGuesses,
-  } = useGameState(initialWordList || randomWordList);
+  } = useGameState({
+    initialWordLength,
+    initialWordList,
+  });
 
   const [showCopyConfirmation, setShowCopyConfirmation] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const dismissModals = () => {
+    setShowCopyConfirmation(false);
     setShowHelp(false);
     setShowHistory(false);
-    setShowCopyConfirmation(false);
+    setShowSettings(false);
   };
 
   const showHelpModal = () => {
@@ -64,6 +76,10 @@ export default function Home({ initialWordList }) {
 
   const showHistoryModal = () => {
     setShowHistory(true);
+  };
+
+  const showSettingsModal = () => {
+    setShowSettings(true);
   };
 
   const shareGame = () => {
@@ -176,6 +192,15 @@ export default function Home({ initialWordList }) {
 
         <button
           className={styles.Button}
+          data-testname="SettingsButton"
+          onClick={showSettingsModal}
+          title="View game settings"
+        >
+          <Icon className={styles.Icon} type="settings" />
+        </button>
+
+        <button
+          className={styles.Button}
           data-testname="HelpButton"
           onClick={showHelpModal}
           title="Help"
@@ -215,6 +240,13 @@ export default function Home({ initialWordList }) {
           {showCopyConfirmation && (
             <CopyConfirmationModal dismissModal={dismissModals} />
           )}
+          {showSettings && (
+            <SettingsModal
+              dismissModal={dismissModals}
+              saveSettings={saveSettings}
+              state={state}
+            />
+          )}
         </main>
 
         <footer className={styles.Footer}>
@@ -229,6 +261,20 @@ export default function Home({ initialWordList }) {
       </div>
     </div>
   );
+}
+
+const ClientOnlyGrid = dynamic(
+  import("../components/Grid")
+    .then((Component) => Component)
+    .catch((err) => console.log(err)),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: false,
+  }
+);
+
+function Grid(props) {
+  return <ClientOnlyGrid {...props} />;
 }
 
 const GitHubIcon = () => (

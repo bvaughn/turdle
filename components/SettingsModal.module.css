@@ -1,0 +1,70 @@
+.Content {
+  min-width: 16rem;
+}
+
+.CloseButton {
+  position: absolute;
+  top: var(--size-medium);
+  right: var(--size-medium);
+  color: var(--color-gray-shade-30);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.CloseIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.Header {
+  font-size: var(--font-size-4);
+  margin-bottom: var(--size-medium);
+}
+
+.WordLengthList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.WordLengthListItem {
+  margin-bottom: var(--size-small);
+  user-select: none;
+}
+.WordLengthListItem:last-of-type {
+  margin-bottom: 0;
+}
+
+.WordLengthLabel {
+  margin: 0 var(--size-small);
+}
+
+.WordLength {
+  color: var(--color-gray-shade-40);
+  font-size: var(--font-size-2);
+}
+
+.SaveButton {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-5);
+  padding: var(--size-medium) var(--size-large);
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-correct);
+  margin-top: var(--size-large);
+  color: var(--color-text);
+}
+.SaveButton:hover {
+  background-color: var(--color-correct-tint);
+}
+
+.SaveIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: var(--size-medium);
+}

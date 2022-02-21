@@ -1,7 +1,13 @@
 import { createElement } from "react";
 import { act, create } from "react-test-renderer";
-import { LOCAL_STORAGE_KEY_GAME_STATS } from "../../constants";
-import { localStorageGetItem } from "../../utils/localStorage";
+import {
+  LOCAL_STORAGE_KEY_GAME_STATS,
+  LOCAL_STORAGE_SETTINGS,
+} from "../../constants";
+import {
+  localStorageGetItem,
+  localStorageSetItem,
+} from "../../utils/localStorage";
 import useGameState from "../../hooks/useGameState";
 
 describe("useGameState", () => {
@@ -13,25 +19,30 @@ describe("useGameState", () => {
   let dismissModal = null;
   let loadPastGame = null;
   let restart = null;
+  let saveSettings = null;
   let submitPendingGuesses = null;
 
   function guessWordHelper(word) {
-    addPendingGuess(word.charAt(0));
-    addPendingGuess(word.charAt(1));
-    addPendingGuess(word.charAt(2));
-    addPendingGuess(word.charAt(3));
+    deleteGuessedWord();
+
+    for (let i = 0; i < word.length; i++) {
+      addPendingGuess(word.charAt(i));
+    }
+
     submitPendingGuesses();
   }
 
   function deleteGuessedWord() {
-    deletePendingGuess();
-    deletePendingGuess();
-    deletePendingGuess();
-    deletePendingGuess();
+    while (currentGameState.pendingGuesses.length > 0) {
+      deletePendingGuess();
+    }
   }
 
-  function Component({ wordList }) {
-    const result = useGameState(wordList);
+  function Component({ wordLength, wordList }) {
+    const result = useGameState({
+      initialWordLength: wordLength,
+      initialWordList: wordList,
+    });
 
     currentGameState = result.state;
 
@@ -50,11 +61,24 @@ describe("useGameState", () => {
     restart = (reuseWord) => {
       act(() => result.restart(reuseWord));
     };
+    saveSettings = (settings, wordList) => {
+      act(() => result.saveSettings(settings, wordList));
+    };
     submitPendingGuesses = () => {
       act(() => result.submitPendingGuesses());
     };
 
     return null;
+  }
+
+  function getGameStats() {
+    const raw = localStorageGetItem(LOCAL_STORAGE_KEY_GAME_STATS);
+    return raw !== null ? JSON.parse(raw) : null;
+  }
+
+  function getSavedSettings() {
+    const raw = localStorageGetItem(LOCAL_STORAGE_SETTINGS);
+    return raw !== null ? JSON.parse(raw) : null;
   }
 
   beforeEach(() => {
@@ -92,6 +116,7 @@ describe("useGameState", () => {
     deletePendingGuess = null;
     dismissModal = null;
     restart = null;
+    saveSettings = null;
     submitPendingGuesses = null;
   });
 
@@ -357,11 +382,6 @@ describe("useGameState", () => {
   });
 
   describe("history", () => {
-    function getGameStats() {
-      const raw = localStorageGetItem(LOCAL_STORAGE_KEY_GAME_STATS);
-      return raw !== null ? JSON.parse(raw) : null;
-    }
-
     it("should record game stats to localStorage", () => {
       let gameStats;
 
@@ -377,9 +397,6 @@ describe("useGameState", () => {
       expect(gameStats.guessDistribution).toMatchInlineSnapshot(`
         Object {
           "1": 1,
-          "2": 0,
-          "3": 0,
-          "4": 0,
         }
       `);
 
@@ -397,9 +414,6 @@ describe("useGameState", () => {
       expect(gameStats.guessDistribution).toMatchInlineSnapshot(`
         Object {
           "1": 1,
-          "2": 0,
-          "3": 0,
-          "4": 0,
         }
       `);
 
@@ -416,8 +430,6 @@ describe("useGameState", () => {
         Object {
           "1": 1,
           "2": 1,
-          "3": 0,
-          "4": 0,
         }
       `);
 
@@ -461,10 +473,97 @@ describe("useGameState", () => {
         Object {
           "1": 2,
           "2": 1,
-          "3": 0,
-          "4": 0,
         }
       `);
+    });
+  });
+
+  describe("settings", () => {
+    it("should support changing game difficulty", () => {
+      expect(currentGameState.targetWord).toHaveLength(4);
+      expect(currentGameState.wordLength).toBe(4);
+
+      saveSettings({ wordLength: 5 }, ["poopy"]);
+      expect(currentGameState.targetWord).toHaveLength(5);
+      expect(currentGameState.wordLength).toBe(5);
+
+      saveSettings({ wordLength: 3 }, ["poo"]);
+      expect(currentGameState.targetWord).toHaveLength(3);
+      expect(currentGameState.wordLength).toBe(3);
+
+      saveSettings({ wordLength: 6 }, ["sewage"]);
+      expect(currentGameState.targetWord).toHaveLength(6);
+      expect(currentGameState.wordLength).toBe(6);
+    });
+
+    it("should support viewing history items with different difficulty (word lengths)", () => {
+      guessWordHelper("poop");
+      guessWordHelper("caca");
+      expect(currentGameState.endGameStatus).toBe("won");
+      dismissModal();
+
+      saveSettings({ wordLength: 5 }, ["poopy", "stool"]);
+      guessWordHelper("poopy");
+      expect(currentGameState.endGameStatus).toBe("won");
+      dismissModal();
+
+      const gameStats = getGameStats();
+
+      loadPastGame(gameStats.history[1]);
+      expect(currentGameState.endGameStatus).toBe("won");
+      expect(currentGameState.submittedGuesses).toHaveLength(2);
+      expect(currentGameState.targetWord).toBe("caca");
+      expect(currentGameState.wordLength).toBe(5); // Does not change when viewing an old word.
+
+      restart();
+      expect(currentGameState.endGameStatus).toBeNull();
+      expect(currentGameState.targetWord).toBe("stool");
+      expect(currentGameState.wordLength).toBe(5);
+    });
+
+    it("should remember wordLength settings between sessions", () => {
+      testRendererInstance.unmount();
+
+      localStorageSetItem(
+        LOCAL_STORAGE_SETTINGS,
+        JSON.stringify({ wordLength: 5 })
+      );
+
+      testRendererInstance = create(createElement(Component));
+
+      expect(currentGameState.targetWord).toHaveLength(5);
+      expect(currentGameState.wordLength).toBe(5);
+    });
+
+    it("should erase current game data when settings are changed", () => {
+      guessWordHelper("caca");
+      expect(currentGameState.endGameStatus).toBe("won");
+      dismissModal();
+
+      saveSettings({ wordLength: 5 }, ["poopy"]);
+
+      expect(currentGameState.endGameStatus).toBeNull();
+      expect(currentGameState.letterKeys).toEqual({});
+      expect(currentGameState.pendingGuesses).toHaveLength(0);
+      expect(currentGameState.submittedGuesses).toHaveLength(0);
+      expect(currentGameState.targetWord).toHaveLength(5);
+    });
+
+    it("should not erase past game data when settings are changed", () => {
+      guessWordHelper("caca");
+      expect(currentGameState.endGameStatus).toBe("won");
+      dismissModal();
+
+      const gameStats = getGameStats();
+      loadPastGame(gameStats.history[0]);
+
+      saveSettings({ wordLength: 5 }, ["poopy"]);
+
+      expect(currentGameState.endGameStatus).toBe("won");
+      expect(currentGameState.letterKeys).not.toEqual({});
+      expect(currentGameState.pendingGuesses).toHaveLength(0);
+      expect(currentGameState.submittedGuesses).toHaveLength(1);
+      expect(currentGameState.targetWord).toHaveLength(4);
     });
   });
 
@@ -507,6 +606,25 @@ describe("useGameState", () => {
       expect(currentGameState).toEqual(completedState);
       submitPendingGuesses();
       expect(currentGameState).toEqual(completedState);
+    });
+
+    it("it should not allow saving invalid preferences", () => {
+      jest.spyOn(global.console, "error").mockImplementation();
+
+      saveSettings();
+      expect(global.console.error).toHaveBeenCalledTimes(1);
+
+      saveSettings({ wordLength: 4 });
+      expect(global.console.error).toHaveBeenCalledTimes(2);
+
+      saveSettings({ wordLength: 4 }, []);
+      expect(global.console.error).toHaveBeenCalledTimes(3);
+
+      saveSettings({}, ["poop"]);
+      expect(global.console.error).toHaveBeenCalledTimes(4);
+
+      saveSettings(null, ["poop"]);
+      expect(global.console.error).toHaveBeenCalledTimes(5);
     });
   });
 });

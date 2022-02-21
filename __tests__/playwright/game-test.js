@@ -13,6 +13,10 @@ const {
   takeKeyboardScreenshot,
 } = require("./utils/keyboard");
 const {
+  changeDifficulty,
+  takeSettingsScreenshot,
+} = require("./utils/settings");
+const {
   closeOpenModal,
   takeEndGameModalScreenshot,
   takeInvalidGuessModalScreenshot,
@@ -198,5 +202,39 @@ test.describe("game", () => {
     // Start new game.
     await clickButton(page, "NewGameButton");
     await takeGridScreenshot(page, "history-new-game.png");
+  });
+
+  test("should be able to change game difficulty", async ({ page }) => {
+    // Guess 4 letter word
+    await loadPage(page, ["poop", "crap", "turd"]);
+    await enterWord(page, "poop");
+    await pressKey(page, "Enter");
+    await closeOpenModal(page);
+
+    // Change difficulty to 3
+    await clickButton(page, "SettingsButton");
+    await takeSettingsScreenshot(page, "default-difficulty-4.png");
+    await changeDifficulty(page, 3);
+    await takeGridScreenshot(page, "settings-difficulty-3.png");
+
+    // View history of different length
+    await clickButton(page, "HistoryButton");
+    await clickButton(page, "HistoryListItem");
+    await takeGridScreenshot(page, "history-previous-difficulty-setting.png");
+
+    // Change difficulty again, this time to 5
+    await clickButton(page, "SettingsButton");
+    await takeSettingsScreenshot(page, "default-difficulty-3.png");
+    await changeDifficulty(page, 5);
+    await takeGridScreenshot(page, "settings-difficulty-5-past-game.png");
+
+    // If we are viewing a past game, changing the settings shouldn't affect the UI
+    // until we explicilty start a new game.
+    await clickButton(page, "NewGameButton");
+    await takeGridScreenshot(page, "settings-difficulty-5-new-game.png");
+
+    // Reload and verify that the new word length setting was remembered.
+    await loadPage(page, null);
+    await takeGridScreenshot(page, "settings-difficulty-5-new-game.png");
   });
 });

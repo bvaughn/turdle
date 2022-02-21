@@ -1,6 +1,24 @@
-.Grid {
+.Grid3,
+.Grid4,
+.Grid5,
+.Grid6 {
   display: inline-grid;
   grid-gap: var(--size-medium);
-  grid-template-columns: repeat(4, 1fr);
   padding: var(--size-medium);
+}
+
+.Grid3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.Grid4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.Grid5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.Grid6 {
+  grid-template-columns: repeat(6, 1fr);
 }

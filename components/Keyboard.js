@@ -17,14 +17,14 @@ export default function Keyboard({
   state,
   submitPendingGuesses,
 }) {
-  const { endGameStatus, pendingGuesses } = state;
+  const { endGameStatus, pendingGuesses, wordLength } = state;
 
   const [invalidGuess, setInvalidGuess] = useState(null);
 
   const dismissInvalidGuessModal = () => setInvalidGuess(null);
 
   const submitValidGuess = () => {
-    if (endGameStatus || pendingGuesses.length !== 4) {
+    if (endGameStatus || pendingGuesses.length !== wordLength) {
       return;
     }
 
@@ -131,13 +131,13 @@ function DeleteKey({ deletePendingGuess, state }) {
 }
 
 function EnterKey({ state, submitValidGuess }) {
-  const { endGameStatus, pendingGuesses } = state;
+  const { endGameStatus, pendingGuesses, wordLength } = state;
 
   return (
     <button
       className={`${styles.Key} ${styles.SpecialKey}`}
       data-testname="EnterKey"
-      disabled={endGameStatus || pendingGuesses.length !== 4}
+      disabled={endGameStatus || pendingGuesses.length !== wordLength}
       onClick={submitValidGuess}
       title="Submit guess"
     >
@@ -147,9 +147,15 @@ function EnterKey({ state, submitValidGuess }) {
 }
 
 function LetterKey({ addPendingGuess, letter, state }) {
-  const { letterKeys, endGameStatus, pendingGuesses, submittedGuesses } = state;
+  const {
+    letterKeys,
+    endGameStatus,
+    pendingGuesses,
+    submittedGuesses,
+    wordLength,
+  } = state;
 
-  const disabled = endGameStatus || pendingGuesses.length === 4;
+  const disabled = endGameStatus || pendingGuesses.length === wordLength;
   const classNames = [styles.Key];
   switch (letterKeys[letter]) {
     case STATUS_CORRECT:

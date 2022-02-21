@@ -4,12 +4,14 @@ import {
   localStorageSetItem,
 } from "../utils/localStorage";
 import { isGuessValid } from "../utils/words";
+import { getRandomWordList } from "../utils/words";
 import {
   COMPLETE_STATUS_LOST,
   COMPLETE_STATUS_WON,
-  GUESS_LENGTH,
+  DEFAULT_WORD_LENGTH,
   MAX_HISTORY_SIZE,
   LOCAL_STORAGE_KEY_GAME_STATS,
+  LOCAL_STORAGE_SETTINGS,
   MAX_GUESSES,
   STATUS_CORRECT,
   STATUS_INCORRECT,
@@ -21,16 +23,12 @@ const ACTION_TYPE_DELETE_PENDING_GUESS = "delete-pending-guess";
 const ACTION_TYPE_DISMISS_MODAL = "dismiss-modal";
 const ACTION_TYPE_LOAD_PAST_GAME = "load-past-game";
 const ACTION_TYPE_RESTART = "restart";
+const ACTION_TYPE_SAVE_SETTINGS = "save-settings";
 const ACTION_TYPE_SUBMIT_PENDING_GUESSES = "submit-pending-guesses";
 
 const DEFAULT_GAME_STATS = {
-  // How many games were won after 1, 2, 3, or 4 guesses?
-  guessDistribution: {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-  },
+  // How many games were won after N number of guesses?
+  guessDistribution: {},
 
   // Serialized representation of the most recent N games.
   history: [],
@@ -70,6 +68,9 @@ const DEFAULT_STATE = {
   // This is the word curently being guessed.
   targetWord: null,
 
+  // The number of letters in the target word.
+  wordLength: 0,
+
   // This is the list of remaining words to be guessed.
   wordList: [],
 };
@@ -79,12 +80,12 @@ function reduce(state, action) {
 
   switch (type) {
     case ACTION_TYPE_ADD_PENDING_GUESS: {
-      const { endGameStatus, pendingGuesses } = state;
+      const { endGameStatus, pendingGuesses, wordLength } = state;
       const { letter } = payload;
 
       if (endGameStatus != null) {
         return state;
-      } else if (pendingGuesses.length >= GUESS_LENGTH) {
+      } else if (pendingGuesses.length >= wordLength) {
         return state;
       }
 
@@ -124,12 +125,13 @@ function reduce(state, action) {
 
     case ACTION_TYPE_LOAD_PAST_GAME: {
       const { game } = payload;
-      const { endGameStatus, submittedGuesses, targetWord } = game;
+      const { endGameStatus, letterKeys, submittedGuesses, targetWord } = game;
 
       return {
         ...state,
         endGameStatus,
         isPastGame: true,
+        letterKeys,
         submittedGuesses,
         targetWord,
       };
@@ -137,7 +139,7 @@ function reduce(state, action) {
 
     case ACTION_TYPE_RESTART: {
       const { reuseWord } = payload;
-      const { targetWord, wordList } = state;
+      const { targetWord, wordList, wordLength } = state;
 
       const newWordList = [...wordList];
 
@@ -153,8 +155,45 @@ function reduce(state, action) {
       return {
         ...DEFAULT_STATE,
         targetWord: newWordList[0],
+        wordLength,
         wordList: newWordList.slice(1),
       };
+    }
+
+    case ACTION_TYPE_SAVE_SETTINGS: {
+      const { settings, wordList } = payload;
+      const { isPastGame } = state;
+
+      if (!wordList || wordList.length === 0) {
+        console.error("Word list required");
+        return state;
+      }
+
+      if (!settings?.wordLength) {
+        console.error("Invalid settings objcet");
+        return state;
+      }
+
+      if (isPastGame) {
+        return {
+          ...state,
+          ...settings,
+
+          wordList,
+        };
+      } else {
+        return {
+          ...state,
+          ...settings,
+
+          endGameStatus: null,
+          letterKeys: {},
+          pendingGuesses: [],
+          submittedGuesses: [],
+          targetWord: wordList[0],
+          wordList: wordList.slice(1),
+        };
+      }
     }
 
     case ACTION_TYPE_SUBMIT_PENDING_GUESSES: {
@@ -164,11 +203,12 @@ function reduce(state, action) {
         pendingGuesses,
         submittedGuesses,
         targetWord,
+        wordLength,
       } = state;
 
       if (endGameStatus) {
         return state;
-      } else if (pendingGuesses.length !== GUESS_LENGTH) {
+      } else if (pendingGuesses.length !== wordLength) {
         return state;
       }
 
@@ -248,26 +288,43 @@ function reduce(state, action) {
       };
     }
 
-    default:
-      throw new Error(`Unrecognized action "${type}"`);
+    default: {
+      console.error(`Unrecognized action "${type}"`);
+      return state;
+    }
   }
 }
 
-export default function useGameState(wordList) {
-  if (wordList.length === 0) {
-    throw Error("Invalid word list provided");
-  }
+export default function useGameState({ initialWordLength, initialWordList }) {
+  const [state, dispatch] = useReducer(reduce, null, () => {
+    let preferences = localStorageGetItem(LOCAL_STORAGE_SETTINGS);
+    if (preferences) {
+      preferences = JSON.parse(preferences);
+    } else {
+      preferences = { wordLength: initialWordLength || DEFAULT_WORD_LENGTH };
+    }
 
-  const [state, dispatch] = useReducer(reduce, {
-    ...DEFAULT_STATE,
-    targetWord: wordList[0],
-    wordList: wordList.slice(1),
+    const wordLength = initialWordLength || preferences.wordLength;
+    const wordList = initialWordList || getRandomWordList(wordLength);
+
+    return {
+      ...DEFAULT_STATE,
+      targetWord: wordList[0],
+      wordLength,
+      wordList: wordList.slice(1),
+    };
   });
 
   const prevEndGameStatusRef = useRef(false);
 
   useEffect(() => {
-    const { endGameStatus, isPastGame, submittedGuesses, targetWord } = state;
+    const {
+      endGameStatus,
+      isPastGame,
+      letterKeys,
+      submittedGuesses,
+      targetWord,
+    } = state;
     if (endGameStatus != null) {
       const prevEndGameStatus = prevEndGameStatusRef.current;
 
@@ -283,7 +340,13 @@ export default function useGameState(wordList) {
           }
 
           if (endGameStatus === COMPLETE_STATUS_WON) {
-            gameStats.guessDistribution[submittedGuesses.length]++;
+            const guessDistribution = gameStats.guessDistribution;
+            if (!guessDistribution[submittedGuesses.length]) {
+              guessDistribution[submittedGuesses.length] = 1;
+            } else {
+              gameStats.guessDistribution[submittedGuesses.length]++;
+            }
+
             gameStats.wonCount++;
           } else {
             gameStats.lostCount++;
@@ -293,6 +356,7 @@ export default function useGameState(wordList) {
           const newGameStat = {
             date: Date.now(),
             endGameStatus,
+            letterKeys,
             submittedGuesses,
             targetWord,
           };
@@ -346,6 +410,13 @@ export default function useGameState(wordList) {
     dispatch({ type: ACTION_TYPE_RESTART, payload: { reuseWord } });
   }, []);
 
+  const saveSettings = useCallback((settings, wordList) => {
+    dispatch({
+      type: ACTION_TYPE_SAVE_SETTINGS,
+      payload: { settings, wordList },
+    });
+  }, []);
+
   const submitPendingGuesses = useCallback(() => {
     dispatch({ type: ACTION_TYPE_SUBMIT_PENDING_GUESSES });
   }, []);
@@ -356,6 +427,7 @@ export default function useGameState(wordList) {
     dismissModal,
     loadPastGame,
     restart,
+    saveSettings,
     state,
     submitPendingGuesses,
   };
