@@ -3,7 +3,9 @@ const {
   clickButton,
   getElementBoundingRect,
   getElementEnabled,
+  getElementVisisble,
   loadPage,
+  takeScreenshot,
 } = require("./utils/general");
 const { takeGridScreenshot } = require("./utils/grid");
 const {
@@ -67,22 +69,22 @@ test.describe("game", () => {
         height: rect.height + padding * 2,
       };
 
-      const takeScreenshot = async (name) => {
+      const takeKeyScreenshot = async (name) => {
         expect(
           await page.screenshot({ clip, disableAnimations: true })
         ).toMatchSnapshot(["keyboard", "key", name]);
       };
 
-      await takeScreenshot("key-a-1-default.png");
+      await takeKeyScreenshot("key-a-1-default.png");
 
       await page.mouse.move(x, y);
-      await takeScreenshot("key-a-2-hover.png");
+      await takeKeyScreenshot("key-a-2-hover.png");
 
       await page.mouse.down();
-      await takeScreenshot("key-a-3-down.png");
+      await takeKeyScreenshot("key-a-3-down.png");
 
       await page.mouse.up();
-      await takeScreenshot("key-a-4-up.png");
+      await takeKeyScreenshot("key-a-4-up.png");
     });
   });
 
@@ -236,5 +238,27 @@ test.describe("game", () => {
     // Reload and verify that the new word length setting was remembered.
     await loadPage(page, null);
     await takeGridScreenshot(page, "settings-difficulty-5-new-game.png");
+  });
+
+  test("should render an error boundary if localStorage gets corrupted", async ({
+    page,
+  }) => {
+    // Simulate a corrupted history
+    await page.evaluate(() => {
+      const gameStats = { history: ["bad-data"] };
+      localStorage.setItem("turdle:game-stats", JSON.stringify(gameStats));
+      window.dispatchEvent(new Event("storage"));
+    });
+
+    // Attempt to view the history (which will cause an error)
+    await clickButton(page, "HistoryButton");
+
+    // Next.js DEV error overlays make screenshot testing difficult 🤮
+    // For our purposes it's sufficient to just verify that the overlay is shown.
+    expect(await getElementVisisble(page, "ErrorBoundary")).toBe(true);
+
+    // Clear session data
+    await clickButton(page, "DeleteSessionDataButton");
+    expect(await getElementVisisble(page, "ErrorBoundary")).toBe(false);
   });
 });

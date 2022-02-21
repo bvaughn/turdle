@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import CopyConfirmationModal from "../components/CopyConfirmationModal";
 import EndGameModal from "../components/EndGameModal";
+import ErrorBoundary from "../components/ErrorBoundary";
 import HelpModal from "../components/HelpModal";
 import HistoryModal from "../components/HistoryModal";
 import Icon from "../components/Icon";
@@ -43,7 +44,15 @@ export async function getServerSideProps({ query }) {
   };
 }
 
-export default function Home({ initialWordLength, initialWordList }) {
+export default function App(props) {
+  return (
+    <ErrorBoundary Fallback={Fallback}>
+      <Home {...props} />
+    </ErrorBoundary>
+  );
+}
+
+function Home({ initialWordLength, initialWordList }) {
   const {
     addPendingGuess,
     deletePendingGuess,
@@ -259,6 +268,41 @@ export default function Home({ initialWordLength, initialWordList }) {
           />
         </footer>
       </div>
+    </div>
+  );
+}
+
+function Fallback({ children }) {
+  return (
+    <div className={styles.Home}>
+      <header className={styles.Header}>
+        <div />
+        <div />
+        <div />
+        <section>
+          <a
+            className={styles.TitleLink}
+            href="https://github.com/bvaughn/turdle"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <span className={styles.Turd}>Turd</span>le 💩
+          </a>
+        </section>
+        <div />
+        <div />
+        <a
+          className={styles.GitHubLink}
+          href="https://github.com/bvaughn/turdle"
+          rel="noreferrer"
+          target="_blank"
+          title="View source"
+        >
+          <GitHubIcon />
+        </a>
+      </header>
+
+      {children}
     </div>
   );
 }

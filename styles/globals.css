@@ -33,9 +33,12 @@
   --color-brown-tint: color(#915f38 tint(10%));
   --color-green: #538d4e;
   --color-green-tint: color(#538d4e tint(10%));
+  --color-red: #ff5555;
+  --color-red-tint: color(#ff5555 tint(10%));
   --color-yellow: #b59f3b;
   --color-yellow-tint: color(#b59f3b tint(10%));
 
+  --color-error: var(--color-red);
   --color-hint: lightyellow;
   --color-text: var(--color-gray-shade-100);
   --color-link: var(--color-blue);
