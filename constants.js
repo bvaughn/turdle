@@ -13,3 +13,7 @@ export const STATUS_PRESENT = "present";
 
 export const LOCAL_STORAGE_KEY_GAME_STATS = "turdle:game-stats";
 export const LOCAL_STORAGE_SETTINGS = "turdle:settings";
+
+export const MAX_KEYBOARD_HEIGHT = 150;
+export const MAX_KEYBOARD_WIDTH = 500;
+export const MAX_GRID_SIZE = 300;

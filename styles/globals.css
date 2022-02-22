@@ -76,24 +76,3 @@ button {
 * {
   box-sizing: border-box;
 }
-
-@media (max-width: 520px), (max-height: 500px) {
-  html,
-  body {
-    font-size: var(--font-size-3);
-  }
-}
-
-@media only screen and (orientation: landscape) and (max-height: 500px) {
-  html,
-  body {
-    font-size: var(--font-size-3);
-  }
-}
-
-@media only screen and (orientation: landscape) and (max-width: 675px) {
-  html,
-  body {
-    font-size: var(--font-size-2);
-  }
-}

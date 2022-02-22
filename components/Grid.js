@@ -1,8 +1,9 @@
-import { MAX_GUESSES, STATUS_PENDING } from "../constants";
+import { withAutoSizer } from "./AutoSizer";
+import { MAX_GRID_SIZE, MAX_GUESSES, STATUS_PENDING } from "../constants";
 import Tile from "./Tile";
 import styles from "./Grid.module.css";
 
-export default function Grid({ state }) {
+function Grid({ height, state, width }) {
   const { pendingGuesses, submittedGuesses, targetWord } = state;
 
   // Use the length of the targetWord, not the wordLength preference,
@@ -56,9 +57,35 @@ export default function Grid({ state }) {
       throw Error(`Invalid Grid size ${wordLength}`);
   }
 
+  // The size of the grid depends on the difficult setting.
+  const aspectRatio = wordLength / MAX_GUESSES;
+
+  let gridGap = 0;
+  let gridHeight = 0;
+  let gridWidth = 0;
+  if (width / aspectRatio > height) {
+    gridHeight = Math.min(height, MAX_GRID_SIZE);
+    gridGap = gridHeight / 50;
+    gridWidth = gridHeight * aspectRatio;
+  } else {
+    gridWidth = Math.min(width, MAX_GRID_SIZE);
+    gridGap = gridWidth / 50;
+    gridHeight = gridWidth / aspectRatio;
+  }
+
   return (
-    <div className={className} data-testname="Grid">
+    <div
+      className={className}
+      data-testname="Grid"
+      style={{
+        "--grid-gap": `${gridGap}px`,
+        "--grid-height": `${gridHeight}px`,
+        "--grid-width": `${gridWidth}px`,
+      }}
+    >
       {children}
     </div>
   );
 }
+
+export default withAutoSizer(Grid);
