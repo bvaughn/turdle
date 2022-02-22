@@ -38,10 +38,6 @@ test.describe("game", () => {
       expect(await isKeyEnabled(page, "Delete")).toBe(false);
 
       await takeKeyboardScreenshot(page, "default-no-guess.png");
-
-      await enterWord(page, "poop");
-
-      await takeKeyboardScreenshot(page, "enabled-valid-guess.png");
     });
 
     test("should accept input from the on-screen keyboard", async ({
@@ -94,9 +90,9 @@ test.describe("game", () => {
   }) => {
     await enterWord(page, "test");
     await pressKey(page, "Enter");
-    await takeKeyboardScreenshot(page, "invalid-guess.png");
     await takeInvalidGuessModalScreenshot(page, "invalid-guess-modal.png");
     await clickButton(page, "RetryButton");
+    await takeKeyboardScreenshot(page, "invalid-guess.png");
     await expect(
       page.locator('[data-testname="InvalidGuessModal"]')
     ).toBeHidden();
@@ -264,37 +260,46 @@ test.describe("game", () => {
   });
 
   test.describe("layouts", () => {
-    async function takeFullPageScreenshot(page, width, height) {
+    async function takeLayoutScreenshot(page, width, height) {
       // const viewport={ width, height };
       // const context = browser.new_context(viewport);
 
       page.setViewportSize({ width, height });
 
-      await page.screenshot({
-        path: join(
-          __dirname,
-          "game-test.js-snapshots",
-          "layout",
-          `${width}-by-${height}.png`
-        ),
-        fullPage: true,
-      });
+      await takeScreenshot(
+        page,
+        "Layout",
+        "layout",
+        `${width}-by-${height}.png`
+      );
     }
 
     test("1200 x 800", async ({ page }) => {
-      await takeFullPageScreenshot(page, 1200, 800);
+      await takeLayoutScreenshot(page, 1200, 800);
     });
 
     test("720 x 350", async ({ page }) => {
-      await takeFullPageScreenshot(page, 720, 350);
+      await takeLayoutScreenshot(page, 720, 350);
     });
 
     test("870 x 520", async ({ page }) => {
-      await takeFullPageScreenshot(page, 870, 520);
+      await takeLayoutScreenshot(page, 870, 520);
     });
 
     test("400 x 600", async ({ page }) => {
-      await takeFullPageScreenshot(page, 400, 600);
+      await takeLayoutScreenshot(page, 400, 600);
+    });
+
+    test("500 x 300", async ({ page }) => {
+      await takeLayoutScreenshot(page, 500, 300);
+    });
+
+    test("300 x 300", async ({ page }) => {
+      await takeLayoutScreenshot(page, 300, 300);
+    });
+
+    test("1000 x 600", async ({ page }) => {
+      await takeLayoutScreenshot(page, 1000, 600);
     });
   });
 });

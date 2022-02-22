@@ -228,7 +228,7 @@ function Home({ initialWordLength, initialWordList }) {
         </a>
       </header>
 
-      <div className={styles.Layout}>
+      <div className={styles.Layout} data-testname="Layout">
         <main className={styles.Main}>
           <Grid state={state} />
 
