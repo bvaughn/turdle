@@ -1,6 +1,7 @@
 const WORD_LISTS = {
-  3: ["ass", "bum", "pie", "poo"],
+  3: ["ass", "bum", "mud", "pie", "poo"],
   4: [
+    "brap",
     "butt",
     "caca",
     "crap",
@@ -31,11 +32,13 @@ const WORD_LISTS = {
     "fecal",
     "feces",
     "filth",
+    "fudge",
     "guano",
     "plops",
     "poops",
     "poopy",
     "scats",
+    "shart",
     "shits",
     "stool",
     "turds",
@@ -45,6 +48,7 @@ const WORD_LISTS = {
     "cowpie",
     "crappy",
     "doodoo",
+    "dookie",
     "egesta",
     "faeces",
     "jobbie",
@@ -52,7 +56,9 @@ const WORD_LISTS = {
     "ordure",
     "sewage",
     "shitty",
+    "sludge",
     "stools",
+    "turdle",
   ],
 };
 
