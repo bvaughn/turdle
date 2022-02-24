@@ -1,7 +1,15 @@
-import Icon from "./Icon";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { withAutoSizer } from "./AutoSizer";
+import Icon from "./Icon";
 import InvalidGuessModal from "./InvalidGuessModal";
-import { STATUS_CORRECT, STATUS_INCORRECT, STATUS_PRESENT } from "../constants";
+import {
+  MAX_KEYBOARD_HEIGHT,
+  MAX_KEYBOARD_WIDTH,
+  STATUS_CORRECT,
+  STATUS_INCORRECT,
+  STATUS_PRESENT,
+} from "../constants";
 import { stopEvent } from "../utils/events";
 import { isGuessValid } from "../utils/words";
 import styles from "./Keyboard.module.css";
@@ -10,12 +18,15 @@ const TOP_ROW_LETTERS = "qwertyuiop".split("");
 const MIDDLE_ROW_LETTERS = "asdfghjkl".split("");
 const BOTTOM_ROW_LETTERS = "zxcvbnm".split("");
 
-export default function Keyboard({
+function Keyboard({
   addPendingGuess,
   deletePendingGuess,
+  height,
+  modalContainerRef,
   restart,
   state,
   submitPendingGuesses,
+  width,
 }) {
   const { endGameStatus, pendingGuesses, wordLength } = state;
 
@@ -69,8 +80,28 @@ export default function Keyboard({
     };
   });
 
+  // There are three rows of keys and the longest one has 10 letters.
+  const aspectRatio = 10 / 3;
+
+  let gridHeight = 0;
+  let gridWidth = 0;
+  if (width / 3.33 > height) {
+    gridHeight = Math.min(height, MAX_KEYBOARD_HEIGHT);
+    gridWidth = gridHeight * aspectRatio;
+  } else {
+    gridWidth = Math.min(width, MAX_KEYBOARD_WIDTH);
+    gridHeight = gridWidth / aspectRatio;
+  }
+
   return (
-    <div className={styles.Keyboard} data-testname="Keyboard">
+    <div
+      className={styles.Keyboard}
+      data-testname="Keyboard"
+      style={{
+        "--grid-height": `${gridHeight}px`,
+        "--grid-width": `${gridWidth}px`,
+      }}
+    >
       <div className={styles.TopRow}>
         {TOP_ROW_LETTERS.map((letter) => (
           <LetterKey
@@ -104,12 +135,14 @@ export default function Keyboard({
         <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
       </div>
 
-      {invalidGuess != null && (
-        <InvalidGuessModal
-          dismissModal={dismissInvalidGuessModal}
-          word={invalidGuess}
-        />
-      )}
+      {invalidGuess != null &&
+        createPortal(
+          <InvalidGuessModal
+            dismissModal={dismissInvalidGuessModal}
+            word={invalidGuess}
+          />,
+          modalContainerRef.current
+        )}
     </div>
   );
 }
@@ -183,3 +216,5 @@ function LetterKey({ addPendingGuess, letter, state }) {
     </button>
   );
 }
+
+export default withAutoSizer(Keyboard);

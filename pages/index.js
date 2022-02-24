@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import CopyConfirmationModal from "../components/CopyConfirmationModal";
@@ -66,6 +66,8 @@ function Home({ initialWordLength, initialWordList }) {
     initialWordLength,
     initialWordList,
   });
+
+  const modalContainerRef = useRef(null);
 
   const [showCopyConfirmation, setShowCopyConfirmation] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -231,7 +233,20 @@ function Home({ initialWordLength, initialWordList }) {
       <div className={styles.Layout} data-testname="Layout">
         <main className={styles.Main}>
           <Grid state={state} />
+        </main>
 
+        <footer className={styles.Footer}>
+          <Keyboard
+            addPendingGuess={addPendingGuess}
+            deletePendingGuess={deletePendingGuess}
+            modalContainerRef={modalContainerRef}
+            restart={restart}
+            state={state}
+            submitPendingGuesses={submitPendingGuesses}
+          />
+        </footer>
+
+        <div ref={modalContainerRef} className={styles.Modals}>
           <EndGameModal
             dismissModal={dismissModal}
             restart={restart}
@@ -256,17 +271,7 @@ function Home({ initialWordLength, initialWordList }) {
               state={state}
             />
           )}
-        </main>
-
-        <footer className={styles.Footer}>
-          <Keyboard
-            addPendingGuess={addPendingGuess}
-            deletePendingGuess={deletePendingGuess}
-            restart={restart}
-            state={state}
-            submitPendingGuesses={submitPendingGuesses}
-          />
-        </footer>
+        </div>
       </div>
     </div>
   );
