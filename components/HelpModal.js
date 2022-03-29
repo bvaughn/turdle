@@ -21,7 +21,7 @@ export default function HelpModal({ dismissModal }) {
       </button>
 
       <div className={styles.Paragraph}>
-        Guess the <strong>TURDLE</strong> in six tries.
+        Guess the <strong>TURDLE</strong> in four tries.
       </div>
       <div className={styles.Paragraph}>
         Each guess must be a valid four-letter word for 💩.
