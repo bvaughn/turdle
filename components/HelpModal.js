@@ -32,18 +32,18 @@ export default function HelpModal({ dismissModal }) {
       </div>
       <div className={styles.Paragraph}>
         <div className={styles.Example}>
-          <Tile letter="C" status={STATUS_CORRECT} />
-          <Tile letter="R" status={STATUS_INCORRECT} />
-          <Tile letter="A" status={STATUS_PRESENT} />
-          <Tile letter="P" status={STATUS_INCORRECT} />
+          <Tile className={styles.Tile} letter="T" status={STATUS_INCORRECT} />
+          <Tile className={styles.Tile} letter="U" status={STATUS_CORRECT} />
+          <Tile className={styles.Tile} letter="R" status={STATUS_INCORRECT} />
+          <Tile className={styles.Tile} letter="D" status={STATUS_PRESENT} />
         </div>
       </div>
       <div className={styles.Paragraph}>
-        The letter <strong>C</strong> is in the word and in the correct spot.
+        The letter <strong>U</strong> is in the word and in the correct spot.
         <br />
-        The letter <strong>A</strong> is in the word but in the wrong spot.
+        The letter <strong>D</strong> is in the word but in the wrong spot.
         <br />
-        The letters <strong>R</strong> and <strong>P</strong> are not in the
+        The letters <strong>T</strong> and <strong>R</strong> are not in the
         word.
       </div>
     </Modal>

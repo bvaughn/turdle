@@ -6,8 +6,8 @@ import {
 } from "../constants";
 import styles from "./Tile.module.css";
 
-export default function Tile({ letter, status }) {
-  const classNames = [styles.Tile];
+export default function Tile({ className = "", letter, status }) {
+  const classNames = [styles.Tile, className];
   if (letter) {
     switch (status) {
       case STATUS_CORRECT:
@@ -31,7 +31,7 @@ export default function Tile({ letter, status }) {
   }
 
   return (
-    <div className={classNames.join(" ")} data-testname="Tile">
+    <div className={classNames.join(" ")} data-testname="Tile" role="button">
       {letter}
     </div>
   );
