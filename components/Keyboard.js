@@ -32,7 +32,10 @@ function Keyboard({
 
   const [invalidGuess, setInvalidGuess] = useState(null);
 
-  const dismissInvalidGuessModal = () => setInvalidGuess(null);
+  const dismissInvalidGuessModal = () => {
+    setInvalidGuess(null);
+    deletePendingGuess(true);
+  };
 
   const submitValidGuess = () => {
     if (endGameStatus || pendingGuesses.length !== wordLength) {
@@ -124,7 +127,7 @@ function Keyboard({
         ))}
       </div>
       <div className={styles.BottomRow}>
-        <HelpKey giveHint={giveHint} state={state} />
+        <HintKey giveHint={giveHint} state={state} />
         {BOTTOM_ROW_LETTERS.map((letter) => (
           <LetterKey
             key={letter}
@@ -180,18 +183,18 @@ function EnterKey({ state, submitValidGuess }) {
   );
 }
 
-function HelpKey({ giveHint, state }) {
+function HintKey({ giveHint, state }) {
   const { endGameStatus, hasRemainingHints } = state;
 
   return (
     <button
       className={`${styles.Key} ${styles.SpecialKey}`}
-      data-testname="HelpKey"
+      data-testname="HintKey"
       disabled={endGameStatus || !hasRemainingHints}
       onClick={giveHint}
-      title="Help"
+      title="Get a hint"
     >
-      <div className={styles.SpecialKeyLabel}>Help</div>
+      <div className={styles.SpecialKeyLabel}>Hint</div>
     </button>
   );
 }

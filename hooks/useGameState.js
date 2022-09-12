@@ -102,6 +102,7 @@ function reduce(state, action) {
     }
 
     case ACTION_TYPE_DELETE_PENDING_GUESS: {
+      const { deleteAll } = payload;
       const { endGameStatus, pendingGuesses } = state;
 
       if (endGameStatus) {
@@ -112,7 +113,9 @@ function reduce(state, action) {
 
       return {
         ...state,
-        pendingGuesses: pendingGuesses.slice(0, pendingGuesses.length - 1),
+        pendingGuesses: deleteAll
+          ? []
+          : pendingGuesses.slice(0, pendingGuesses.length - 1),
       };
     }
 
@@ -426,8 +429,11 @@ export default function useGameState({ initialWordLength, initialWordList }) {
     });
   }, []);
 
-  const deletePendingGuess = useCallback(() => {
-    dispatch({ type: ACTION_TYPE_DELETE_PENDING_GUESS });
+  const deletePendingGuess = useCallback((deleteAll = false) => {
+    dispatch({
+      type: ACTION_TYPE_DELETE_PENDING_GUESS,
+      payload: { deleteAll },
+    });
   }, []);
 
   const dismissModal = useCallback(() => {
