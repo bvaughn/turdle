@@ -5,7 +5,7 @@
   padding: var(--size-medium);
   user-select: none;
 
-  --key-size: 5ch;
+  --key-size: 6ch;
 }
 
 .TopRow,
@@ -116,8 +116,32 @@
   height: var(--size-large);
 }
 
-@media (max-width: 500px) {
+@media (orientation: portrait) and (max-width: 550px) {
+  .Keyboard {
+    --key-size: 5ch;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 475px) {
   .Keyboard {
     --key-size: 4ch;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 850px) {
+  .Keyboard {
+    --key-size: 5ch;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 750px) {
+  .Keyboard {
+    --key-size: 4ch;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 575px) {
+  .Keyboard {
+    --key-size: 3ch;
   }
 }

@@ -81,8 +81,8 @@ function Keyboard({
     };
   });
 
-  // There are three rows of keys and the longest one has 10 letters.
-  const aspectRatio = 10 / 3;
+  // There are three rows of keys and the longest one has 11 keys.
+  const aspectRatio = 11 / 3;
 
   let gridHeight = 0;
   let gridWidth = 0;
