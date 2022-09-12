@@ -48,6 +48,7 @@ const DEFAULT_STATE = {
   endGameStatus: null,
 
   // The letters that have been given as hints.
+  hasRemainingHints: true,
   hints: [],
 
   // We are currently viewing a past (read-only) game.
@@ -140,7 +141,7 @@ function reduce(state, action) {
       const unguessedLetters = Array.from(targetWordLetters.keys()).filter(
         (letter) => !guessedLetters.has(letter) && !hints.includes(letter)
       );
-      if (unguessedLetters.size === 0) {
+      if (unguessedLetters.length === 0) {
         return state;
       }
 
@@ -149,6 +150,7 @@ function reduce(state, action) {
 
       return {
         ...state,
+        hasRemainingHints: unguessedLetters.length > 1,
         hints: [...hints, letter],
       };
     }

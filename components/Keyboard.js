@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { withAutoSizer } from "./AutoSizer";
 import Icon from "./Icon";
@@ -13,7 +13,6 @@ import {
 import { stopEvent } from "../utils/events";
 import { isGuessValid } from "../utils/words";
 import styles from "./Keyboard.module.css";
-import { getGuessedLetters, getUniqueLetters } from "../utils/game";
 
 const TOP_ROW_LETTERS = "qwertyuiop".split("");
 const MIDDLE_ROW_LETTERS = "asdfghjkl".split("");
@@ -182,23 +181,13 @@ function EnterKey({ state, submitValidGuess }) {
 }
 
 function HelpKey({ giveHint, state }) {
-  const { endGameStatus, submittedGuesses, targetWord } = state;
-
-  const targetWordLetters = useMemo(
-    () => getUniqueLetters(targetWord),
-    [targetWord]
-  );
-
-  const guessedLetters = useMemo(
-    () => getGuessedLetters(submittedGuesses, targetWordLetters),
-    [submittedGuesses, targetWordLetters]
-  );
+  const { endGameStatus, hasRemainingHints } = state;
 
   return (
     <button
       className={`${styles.Key} ${styles.SpecialKey}`}
       data-testname="HelpKey"
-      disabled={endGameStatus || guessedLetters.size === targetWordLetters.size}
+      disabled={endGameStatus || !hasRemainingHints}
       onClick={giveHint}
       title="Help"
     >
