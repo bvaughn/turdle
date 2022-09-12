@@ -21,9 +21,9 @@ const BOTTOM_ROW_LETTERS = "zxcvbnm".split("");
 function Keyboard({
   addPendingGuess,
   deletePendingGuess,
+  giveHint,
   height,
   modalContainerRef,
-  restart,
   state,
   submitPendingGuesses,
   width,
@@ -32,7 +32,10 @@ function Keyboard({
 
   const [invalidGuess, setInvalidGuess] = useState(null);
 
-  const dismissInvalidGuessModal = () => setInvalidGuess(null);
+  const dismissInvalidGuessModal = () => {
+    setInvalidGuess(null);
+    deletePendingGuess(true);
+  };
 
   const submitValidGuess = () => {
     if (endGameStatus || pendingGuesses.length !== wordLength) {
@@ -80,8 +83,8 @@ function Keyboard({
     };
   });
 
-  // There are three rows of keys and the longest one has 10 letters.
-  const aspectRatio = 10 / 3;
+  // There are three rows of keys and the longest one has 11 keys.
+  const aspectRatio = 11 / 3;
 
   let gridHeight = 0;
   let gridWidth = 0;
@@ -111,6 +114,7 @@ function Keyboard({
             state={state}
           />
         ))}
+        <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
       </div>
       <div className={styles.MiddleRow}>
         {MIDDLE_ROW_LETTERS.map((letter) => (
@@ -123,7 +127,7 @@ function Keyboard({
         ))}
       </div>
       <div className={styles.BottomRow}>
-        <EnterKey state={state} submitValidGuess={submitValidGuess} />
+        <HintKey giveHint={giveHint} state={state} />
         {BOTTOM_ROW_LETTERS.map((letter) => (
           <LetterKey
             key={letter}
@@ -132,7 +136,7 @@ function Keyboard({
             state={state}
           />
         ))}
-        <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
+        <EnterKey state={state} submitValidGuess={submitValidGuess} />
       </div>
 
       {invalidGuess != null &&
@@ -152,7 +156,7 @@ function DeleteKey({ deletePendingGuess, state }) {
 
   return (
     <button
-      className={`${styles.Key} ${styles.SpecialKey}`}
+      className={`${styles.Key}`}
       data-testname="DeleteKey"
       disabled={endGameStatus || pendingGuesses.length === 0}
       onClick={deletePendingGuess}
@@ -179,27 +183,42 @@ function EnterKey({ state, submitValidGuess }) {
   );
 }
 
+function HintKey({ giveHint, state }) {
+  const { endGameStatus, hasRemainingHints } = state;
+
+  return (
+    <button
+      className={`${styles.Key} ${styles.SpecialKey}`}
+      data-testname="HintKey"
+      disabled={endGameStatus || !hasRemainingHints}
+      onClick={giveHint}
+      title="Get a hint"
+    >
+      <div className={styles.SpecialKeyLabel}>Hint</div>
+    </button>
+  );
+}
+
 function LetterKey({ addPendingGuess, letter, state }) {
-  const {
-    letterKeys,
-    endGameStatus,
-    pendingGuesses,
-    submittedGuesses,
-    wordLength,
-  } = state;
+  const { endGameStatus, hints, letterKeys, pendingGuesses, wordLength } =
+    state;
 
   const disabled = endGameStatus || pendingGuesses.length === wordLength;
   const classNames = [styles.Key];
-  switch (letterKeys[letter]) {
-    case STATUS_CORRECT:
-      classNames.push(styles.KeyCorrect);
-      break;
-    case STATUS_PRESENT:
-      classNames.push(styles.KeyPresent);
-      break;
-    case STATUS_INCORRECT:
-      classNames.push(styles.KeyIncorrect);
-      break;
+  if (hints.includes(letter)) {
+    classNames.push(styles.KeyHint);
+  } else {
+    switch (letterKeys[letter]) {
+      case STATUS_CORRECT:
+        classNames.push(styles.KeyCorrect);
+        break;
+      case STATUS_PRESENT:
+        classNames.push(styles.KeyPresent);
+        break;
+      case STATUS_INCORRECT:
+        classNames.push(styles.KeyIncorrect);
+        break;
+    }
   }
 
   const handleClick = () => addPendingGuess(letter);

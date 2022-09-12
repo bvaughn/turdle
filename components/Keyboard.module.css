@@ -1,11 +1,11 @@
 .Keyboard {
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  height: var(--grid-height);
-  width: var(--grid-width);
+  grid-template-rows: repeat(3, auto);
   grid-gap: var(--size-tiny);
   padding: var(--size-medium);
   user-select: none;
+
+  --key-size: 6ch;
 }
 
 .TopRow,
@@ -14,15 +14,17 @@
   display: inline-grid;
   grid-gap: var(--size-tiny);
   margin: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 .TopRow {
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(11, auto);
 }
 .MiddleRow {
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(9, auto);
 }
 .BottomRow {
-  grid-template-columns: 2fr repeat(7, 1fr) 2fr;
+  grid-template-columns: repeat(9, auto);
 }
 
 .Key {
@@ -38,6 +40,8 @@
   background-color: var(--color-gray-shade-40);
   transition: background-color 150ms;
   cursor: pointer;
+  width: var(--key-size);
+  height: var(--key-size);
 }
 .Key:disabled {
   background-color: var(--color-gray-shade-20);
@@ -51,6 +55,17 @@
   background-color: var(--color-gray-shade-40);
   position: relative;
   top: 1px;
+}
+
+.KeyHint:not(.KeyHint:disabled) {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--color-correct),
+    var(--color-correct) 0.5rem,
+    var(--color-correct-tint) 0.5rem,
+    var(--color-correct-tint) 1rem
+  );
+  color: var(--color-text);
 }
 
 .KeyCorrect,
@@ -90,6 +105,7 @@
 }
 
 .SpecialKey {
+  width: calc(var(--key-size) * 2);
 }
 
 .SpecialKeyLabel {
@@ -100,14 +116,32 @@
   height: var(--size-large);
 }
 
-@media only screen and (orientation: landscape) and (max-width: 550px) {
-  .Key,
-  .SpecialKey {
-    font-size: var(--font-size-1);
-    text-transform: lowercase;
+@media (orientation: portrait) and (max-width: 550px) {
+  .Keyboard {
+    --key-size: 5ch;
   }
-  .SpecialKeyIcon {
-    width: var(--size-medium);
-    height: var(--size-medium);
+}
+
+@media (orientation: portrait) and (max-width: 475px) {
+  .Keyboard {
+    --key-size: 4ch;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 850px) {
+  .Keyboard {
+    --key-size: 5ch;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 750px) {
+  .Keyboard {
+    --key-size: 4ch;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 575px) {
+  .Keyboard {
+    --key-size: 3ch;
   }
 }

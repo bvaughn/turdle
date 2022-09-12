@@ -26,3 +26,21 @@ export function gameStateToCopyString(gameState) {
       .join("\n")
   );
 }
+
+export function getGuessedLetters(submittedGuesses, targetWordLetters) {
+  const guessedLetters = new Set();
+  submittedGuesses.forEach((guess) => {
+    for (let i = 0; i < guess.length; i++) {
+      const letter = guess[i];
+      if (targetWordLetters.has(letter)) {
+        guessedLetters.add(letter);
+      }
+    }
+  });
+
+  return guessedLetters;
+}
+
+export function getUniqueLetters(word) {
+  return new Set(word.split(""));
+}

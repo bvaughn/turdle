@@ -17,10 +17,12 @@ import {
   STATUS_INCORRECT,
   STATUS_PRESENT,
 } from "../constants";
+import { getGuessedLetters, getUniqueLetters } from "../utils/game";
 
 const ACTION_TYPE_ADD_PENDING_GUESS = "add-pending-guess";
 const ACTION_TYPE_DELETE_PENDING_GUESS = "delete-pending-guess";
 const ACTION_TYPE_DISMISS_MODAL = "dismiss-modal";
+const ACTION_TYPE_GIVE_HINT = "give-hint";
 const ACTION_TYPE_LOAD_PAST_GAME = "load-past-game";
 const ACTION_TYPE_RESTART = "restart";
 const ACTION_TYPE_SAVE_SETTINGS = "save-settings";
@@ -44,6 +46,10 @@ const DEFAULT_STATE = {
   // If the game is complete, this field will be either "won" or "lost".
   // If this field is null, the game is still in progress.
   endGameStatus: null,
+
+  // The letters that have been given as hints.
+  hasRemainingHints: true,
+  hints: [],
 
   // We are currently viewing a past (read-only) game.
   isPastGame: false,
@@ -96,6 +102,7 @@ function reduce(state, action) {
     }
 
     case ACTION_TYPE_DELETE_PENDING_GUESS: {
+      const { deleteAll } = payload;
       const { endGameStatus, pendingGuesses } = state;
 
       if (endGameStatus) {
@@ -106,7 +113,9 @@ function reduce(state, action) {
 
       return {
         ...state,
-        pendingGuesses: pendingGuesses.slice(0, pendingGuesses.length - 1),
+        pendingGuesses: deleteAll
+          ? []
+          : pendingGuesses.slice(0, pendingGuesses.length - 1),
       };
     }
 
@@ -120,6 +129,32 @@ function reduce(state, action) {
       return {
         ...state,
         showEndGameModal: false,
+      };
+    }
+
+    case ACTION_TYPE_GIVE_HINT: {
+      const { hints, submittedGuesses, targetWord } = state;
+
+      const targetWordLetters = getUniqueLetters(targetWord);
+      const guessedLetters = getGuessedLetters(
+        submittedGuesses,
+        targetWordLetters
+      );
+
+      const unguessedLetters = Array.from(targetWordLetters.keys()).filter(
+        (letter) => !guessedLetters.has(letter) && !hints.includes(letter)
+      );
+      if (unguessedLetters.length === 0) {
+        return state;
+      }
+
+      const index = Math.floor(Math.random() * length);
+      const letter = unguessedLetters[index];
+
+      return {
+        ...state,
+        hasRemainingHints: unguessedLetters.length > 1,
+        hints: [...hints, letter],
       };
     }
 
@@ -394,12 +429,19 @@ export default function useGameState({ initialWordLength, initialWordList }) {
     });
   }, []);
 
-  const deletePendingGuess = useCallback(() => {
-    dispatch({ type: ACTION_TYPE_DELETE_PENDING_GUESS });
+  const deletePendingGuess = useCallback((deleteAll = false) => {
+    dispatch({
+      type: ACTION_TYPE_DELETE_PENDING_GUESS,
+      payload: { deleteAll },
+    });
   }, []);
 
   const dismissModal = useCallback(() => {
     dispatch({ type: ACTION_TYPE_DISMISS_MODAL });
+  }, []);
+
+  const giveHint = useCallback(() => {
+    dispatch({ type: ACTION_TYPE_GIVE_HINT });
   }, []);
 
   const loadPastGame = useCallback((game) => {
@@ -425,6 +467,7 @@ export default function useGameState({ initialWordLength, initialWordList }) {
     addPendingGuess,
     deletePendingGuess,
     dismissModal,
+    giveHint,
     loadPastGame,
     restart,
     saveSettings,

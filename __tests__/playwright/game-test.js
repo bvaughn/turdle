@@ -83,6 +83,8 @@ test.describe("game", () => {
       await page.mouse.up();
       await takeKeyScreenshot("key-a-4-up.png");
     });
+
+    // TODO Add tests for "Hint" button
   });
 
   test("should only accept guesses that are valid 4-letter poop words", async ({
