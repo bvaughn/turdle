@@ -13,11 +13,7 @@ import useGameState from "../hooks/useGameState";
 import { copyTextToClipboard } from "../utils/copy";
 import { gameStateToCopyString } from "../utils/game";
 import useLocalStorage from "../hooks/useLocalStorage";
-import {
-  COMPLETE_STATUS_WON,
-  DEFAULT_WORD_LENGTH,
-  LOCAL_STORAGE_KEY_GAME_STATS,
-} from "../constants";
+import { LOCAL_STORAGE_KEY_GAME_STATS } from "../constants";
 import styles from "../styles/Home.module.css";
 
 const TITLE = "Turdle";
@@ -57,6 +53,7 @@ function Home({ initialWordLength, initialWordList }) {
     addPendingGuess,
     deletePendingGuess,
     dismissModal,
+    giveHint,
     loadPastGame,
     restart,
     saveSettings,
@@ -239,6 +236,7 @@ function Home({ initialWordLength, initialWordList }) {
           <Keyboard
             addPendingGuess={addPendingGuess}
             deletePendingGuess={deletePendingGuess}
+            giveHint={giveHint}
             modalContainerRef={modalContainerRef}
             restart={restart}
             state={state}

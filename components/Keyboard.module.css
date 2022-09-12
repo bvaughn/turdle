@@ -18,7 +18,7 @@
   margin-right: auto;
 }
 .TopRow {
-  grid-template-columns: repeat(10, auto);
+  grid-template-columns: repeat(11, auto);
 }
 .MiddleRow {
   grid-template-columns: repeat(9, auto);
@@ -55,6 +55,17 @@
   background-color: var(--color-gray-shade-40);
   position: relative;
   top: 1px;
+}
+
+.KeyHint:not(.KeyHint:disabled) {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--color-correct),
+    var(--color-correct) 0.5rem,
+    var(--color-correct-tint) 0.5rem,
+    var(--color-correct-tint) 1rem
+  );
+  color: var(--color-text);
 }
 
 .KeyCorrect,

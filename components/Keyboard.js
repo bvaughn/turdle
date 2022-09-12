@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { withAutoSizer } from "./AutoSizer";
 import Icon from "./Icon";
@@ -13,6 +13,7 @@ import {
 import { stopEvent } from "../utils/events";
 import { isGuessValid } from "../utils/words";
 import styles from "./Keyboard.module.css";
+import { getGuessedLetters, getUniqueLetters } from "../utils/game";
 
 const TOP_ROW_LETTERS = "qwertyuiop".split("");
 const MIDDLE_ROW_LETTERS = "asdfghjkl".split("");
@@ -21,9 +22,9 @@ const BOTTOM_ROW_LETTERS = "zxcvbnm".split("");
 function Keyboard({
   addPendingGuess,
   deletePendingGuess,
+  giveHint,
   height,
   modalContainerRef,
-  restart,
   state,
   submitPendingGuesses,
   width,
@@ -111,6 +112,7 @@ function Keyboard({
             state={state}
           />
         ))}
+        <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
       </div>
       <div className={styles.MiddleRow}>
         {MIDDLE_ROW_LETTERS.map((letter) => (
@@ -123,7 +125,7 @@ function Keyboard({
         ))}
       </div>
       <div className={styles.BottomRow}>
-        <EnterKey state={state} submitValidGuess={submitValidGuess} />
+        <HelpKey giveHint={giveHint} state={state} />
         {BOTTOM_ROW_LETTERS.map((letter) => (
           <LetterKey
             key={letter}
@@ -132,7 +134,7 @@ function Keyboard({
             state={state}
           />
         ))}
-        <DeleteKey deletePendingGuess={deletePendingGuess} state={state} />
+        <EnterKey state={state} submitValidGuess={submitValidGuess} />
       </div>
 
       {invalidGuess != null &&
@@ -152,7 +154,7 @@ function DeleteKey({ deletePendingGuess, state }) {
 
   return (
     <button
-      className={`${styles.Key} ${styles.SpecialKey}`}
+      className={`${styles.Key}`}
       data-testname="DeleteKey"
       disabled={endGameStatus || pendingGuesses.length === 0}
       onClick={deletePendingGuess}
@@ -179,27 +181,52 @@ function EnterKey({ state, submitValidGuess }) {
   );
 }
 
+function HelpKey({ giveHint, state }) {
+  const { endGameStatus, submittedGuesses, targetWord } = state;
+
+  const targetWordLetters = useMemo(
+    () => getUniqueLetters(targetWord),
+    [targetWord]
+  );
+
+  const guessedLetters = useMemo(
+    () => getGuessedLetters(submittedGuesses, targetWordLetters),
+    [submittedGuesses, targetWordLetters]
+  );
+
+  return (
+    <button
+      className={`${styles.Key} ${styles.SpecialKey}`}
+      data-testname="HelpKey"
+      disabled={endGameStatus || guessedLetters.size === targetWordLetters.size}
+      onClick={giveHint}
+      title="Help"
+    >
+      <div className={styles.SpecialKeyLabel}>Help</div>
+    </button>
+  );
+}
+
 function LetterKey({ addPendingGuess, letter, state }) {
-  const {
-    letterKeys,
-    endGameStatus,
-    pendingGuesses,
-    submittedGuesses,
-    wordLength,
-  } = state;
+  const { endGameStatus, hints, letterKeys, pendingGuesses, wordLength } =
+    state;
 
   const disabled = endGameStatus || pendingGuesses.length === wordLength;
   const classNames = [styles.Key];
-  switch (letterKeys[letter]) {
-    case STATUS_CORRECT:
-      classNames.push(styles.KeyCorrect);
-      break;
-    case STATUS_PRESENT:
-      classNames.push(styles.KeyPresent);
-      break;
-    case STATUS_INCORRECT:
-      classNames.push(styles.KeyIncorrect);
-      break;
+  if (hints.includes(letter)) {
+    classNames.push(styles.KeyHint);
+  } else {
+    switch (letterKeys[letter]) {
+      case STATUS_CORRECT:
+        classNames.push(styles.KeyCorrect);
+        break;
+      case STATUS_PRESENT:
+        classNames.push(styles.KeyPresent);
+        break;
+      case STATUS_INCORRECT:
+        classNames.push(styles.KeyIncorrect);
+        break;
+    }
   }
 
   const handleClick = () => addPendingGuess(letter);
